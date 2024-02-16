@@ -13,7 +13,7 @@ import '../../widgets/dialogs.dart';
 class SignInScreen extends StatelessWidget {
   SignInScreen({Key? key}) : super(key: key);
 
-  TextEditingController phoneNumberController = TextEditingController();
+ TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
 
@@ -128,7 +128,7 @@ class SignInScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildPhoneNumber(BuildContext context) {
     return CustomTextFormField(
-        controller: phoneNumberController,
+        controller: emailController,
         hintText: "Email Address",
         textInputType: TextInputType.emailAddress,
         autofocus: false,
@@ -200,8 +200,8 @@ class SignInScreen extends StatelessWidget {
     try {
       showProcessingDialog(context);
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: "tinashemashaya18@gmail.com",
-        password: "Tinashe2023",
+        email: emailController.text,
+        password: passwordController.text,
       );
       await dismissDialog(context);
       Navigator.pushNamed(context, AppRoutes.myHomeEmptyScreen);

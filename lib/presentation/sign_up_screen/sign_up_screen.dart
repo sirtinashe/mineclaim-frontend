@@ -216,8 +216,8 @@ class SignUpScreen extends StatelessWidget {
       // showInformativeDialog("Signing uP", Colors.black54, "Please wait...", context);
       showProcessingDialog(context);
       final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: "tinashemashaya18@gmail.com",
-        password: "Tinashe2023",
+        email: emailController.text,
+        password: passwordController.text,
       );
       if (credential != null) {
         // User is authenticated
