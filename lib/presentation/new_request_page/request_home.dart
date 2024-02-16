@@ -103,65 +103,66 @@ class _RequestHomeScreenState extends State<RequestHomeScreen> {
 
   /// Section Widget
   Widget _buildPropertyList(BuildContext context) {
-    // return Container(
-    //   child: ListView.builder(
-    //       physics: NeverScrollableScrollPhysics(),
-    //       shrinkWrap: true,
-    //
-    //       itemCount: requestData.length,
-    //
-    //       itemBuilder: (context, index) {
-    //         return Card(
-    //           child: Padding(
-    //             padding: EdgeInsets.only(bottom: 10.0.v),
-    //             child: RequestWidget(
-    //               requestData: requestData[index],
-    //
-    //             ),
-    //           ),
-    //         );
-    //       }),
-     return Container(
-       child: StreamBuilder<QuerySnapshot>(
-       stream: stream,
-       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-         if (snapshot.hasError)
-           return Text('Something went wrong');
-         if (snapshot.connectionState == ConnectionState.waiting)
-           return Center(
-               child: Column(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 crossAxisAlignment: CrossAxisAlignment.center,
-                 children: [
-                   CircularProgressIndicator(
-                     color: PrimaryColors().appDarkBlue,
-                   ),
-                   Text("Fetching your requests..."),
-                 ],
-               )
-           );
-         List<DocumentSnapshot> documents = snapshot.data!.docs;
-         List<Requests> serializedRequests =  RequestSerializer.serialize(documents);
-         return ListView.builder(
-           itemCount: serializedRequests.length,
-           itemBuilder: (BuildContext context, int index) {
-             // DocumentSnapshot document = documents[index];
-             Requests requests = serializedRequests[index];
-             // print(document);
-             return Card(
-               child: Padding(
-                 padding: EdgeInsets.only(bottom: 10.0.v),
-                 child: RequestWidget(
-                   requestData: serializedRequests[index],
+    return Container(
+      child: ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
 
-                 ),
-               ),
-             );
-           },
-         );
-       },
-     ),
+          itemCount: requestData.length,
+
+          itemBuilder: (context, index) {
+            return Card(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 10.0.v),
+                child: RequestWidget(
+                  requestData: requestData[index],
+
+                ),
+              ),
+            );
+          }),
     );
+    //  return Container(
+    //    child: StreamBuilder<QuerySnapshot>(
+    //    stream: stream,
+    //    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    //      if (snapshot.hasError)
+    //        return Text('Something went wrong');
+    //      if (snapshot.connectionState == ConnectionState.waiting)
+    //        return Center(
+    //            child: Column(
+    //              mainAxisAlignment: MainAxisAlignment.center,
+    //              crossAxisAlignment: CrossAxisAlignment.center,
+    //              children: [
+    //                CircularProgressIndicator(
+    //                  color: PrimaryColors().appDarkBlue,
+    //                ),
+    //                Text("Fetching your requests..."),
+    //              ],
+    //            )
+    //        );
+    //      List<DocumentSnapshot> documents = snapshot.data!.docs;
+    //      List<Requests> serializedRequests =  RequestSerializer.serialize(documents);
+    //      return ListView.builder(
+    //        itemCount: serializedRequests.length,
+    //        itemBuilder: (BuildContext context, int index) {
+    //          // DocumentSnapshot document = documents[index];
+    //          Requests requests = serializedRequests[index];
+    //          // print(document);
+    //          return Card(
+    //            child: Padding(
+    //              padding: EdgeInsets.only(bottom: 10.0.v),
+    //              child: RequestWidget(
+    //                requestData: serializedRequests[index],
+    //
+    //              ),
+    //            ),
+    //          );
+    //        },
+    //      );
+    //    },
+    //  ),
+    // );
   }
 
   onTapProperty(BuildContext context) {
