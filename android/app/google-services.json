@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "378520027757",
+    "project_id": "intellixbot-jqcj",
+    "storage_bucket": "intellixbot-jqcj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378520027757:android:347ca136ae9a33d68a7564",
+        "android_client_info": {
+          "package_name": "com.intellixil.intellix_home"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "378520027757-puijge4rf8asa3lru8a9m4a00llt1nv3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.intellixil.intellix_home",
+            "certificate_hash": "847c02610fe458a499f08e27291aa41fd2f71a62"
+          }
+        },
+        {
+          "client_id": "378520027757-eccmmvn59p8jmi49vf24747cu8tq6j9v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXFn6QdeHs_X7CIbB832GkHp7a3vcOozs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "378520027757-eccmmvn59p8jmi49vf24747cu8tq6j9v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "378520027757-70i8fgl78jf3tpgt6oe6erk790gsov9l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.intellixil.intellixhome.intellixHome"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378520027757:android:4ece945ec5362fa68a7564",
+        "android_client_info": {
+          "package_name": "com.mineclaim.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "378520027757-eccmmvn59p8jmi49vf24747cu8tq6j9v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXFn6QdeHs_X7CIbB832GkHp7a3vcOozs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "378520027757-eccmmvn59p8jmi49vf24747cu8tq6j9v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "378520027757-70i8fgl78jf3tpgt6oe6erk790gsov9l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.intellixil.intellixhome.intellixHome"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

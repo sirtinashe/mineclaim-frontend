@@ -1,0 +1,4 @@
+enum RequestTypes{
+  TRANSFER_OWNERSHIP,
+  VERIFY_PROFILE
+}
