@@ -139,6 +139,17 @@ class RequestWidget extends StatelessWidget {
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         );
         break ;
+      case RequestTypes.ADD_MINE:
+        // TODO: Handle this case.
+        PersistentNavBarNavigator.pushNewScreen(
+          context,
+          screen: AuthoriseScreen(
+            requestData: requestData,
+          ),
+          withNavBar: false, // OPTIONAL VALUE. True by default.
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        );
+        break;
     }
   }
 }

@@ -2,7 +2,6 @@ class Mine {
   String mineId;
   String mineLocation;
   String area;
-  String price;
   String gpsLatitude;
   String gpsLongitude;
   String timeAdded;
@@ -10,19 +9,21 @@ class Mine {
   String mineOwner;
   String requestType;
   String requestStatus;
+  String claimant;
 
   Mine({
     required this.mineId,
     required this.mineLocation,
     required this.area,
-    required this.price,
     required this.gpsLatitude,
     required this.gpsLongitude,
     required this.timeAdded,
     required this.verified,
     required this.mineOwner,
     required this.requestType,
-    required this.requestStatus
+    required this.requestStatus,
+    required this.claimant
+
 
   });
 
@@ -31,14 +32,15 @@ class Mine {
       mineId: json['mineId'],
       mineLocation: json['mineLocation'],
       area: json['area'],
-      price: json['price'],
+
       gpsLatitude: json['gpsLatitude'],
       gpsLongitude: json['gpsLongitude'],
       timeAdded: json['timeAdded'],
       verified: json['verified'],
       mineOwner: json['mineOwner'],
       requestType: json['requestType'],
-      requestStatus: json['requestStatus']
+      requestStatus: json['requestStatus'],
+      claimant: json['claimant']
     );
   }
   // to convert the object to a json object
@@ -47,14 +49,15 @@ class Mine {
       'mineId': mineId,
       'mineLocation': mineLocation,
       'area': area,
-      'price': price,
+
       'gpsLatitude': gpsLatitude,
       'gpsLongitude': gpsLongitude,
       'timeAdded': timeAdded,
       'verified': verified,
       'mineOwner': mineOwner,
       'requestStatus':requestStatus,
-      'requestType':requestType
+      'requestType':requestType,
+      'claimant':claimant
 
     };
   }

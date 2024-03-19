@@ -22,10 +22,10 @@ class RequestSerializer {
             "mineId": request['mineId'],
             "mineLocation": request['mineLocation'],
             "area": request['area'],
-            "price": "${request['price']}",
+            "claimant": "${request['claimant']}",
           },
           imagePath: 'https://www.researchgate.net/publication/352676417/figure/fig1/AS:1037724651909121@1624424245893/Satellite-location-for-Mimosa-Mine-Source-Google-maps.png',
-          requestTypes: RequestTypes.TRANSFER_OWNERSHIP,
+          requestTypes: RequestTypes.ADD_MINE,
       ));
     }
 

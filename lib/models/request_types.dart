@@ -1,4 +1,5 @@
 enum RequestTypes{
   TRANSFER_OWNERSHIP,
-  VERIFY_PROFILE
+  VERIFY_PROFILE,
+  ADD_MINE,
 }

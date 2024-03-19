@@ -6,6 +6,7 @@ import 'package:mineclaim/widgets/custom_icon_button.dart';
 import 'package:mineclaim/widgets/custom_outlined_button.dart';
 import 'package:mineclaim/widgets/dialogs.dart';
 
+import '../../apis/firebase_db.dart';
 import '../../models/requests.dart';
 import '../../widgets/app_bar/appbar_subtitle_two.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
@@ -26,7 +27,7 @@ class AuthoriseScreen extends StatelessWidget {
           centerTitle: true,
           backgroundColor: PrimaryColors().appDarkBlue,
           title: Text(
-            "Transfer Authorisation",
+            requestData.requestType,
             style: TextStyle(
               color: Colors.white,
             ),
@@ -368,41 +369,6 @@ class AuthoriseScreen extends StatelessWidget {
                   },
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  left: 4.h,
-                  right: 4.h,
-                ),
-                child: ListTile(
-                  visualDensity: VisualDensity(
-                    vertical: -4,
-                  ),
-                  // textColor: Colors.black54,
-                  tileColor: Colors.white54,
-                  leading: const Icon(
-                    Icons.price_change,
-                    color: Colors.black54,
-                  ),
-                  title: const Text(
-                    'Price',
-                    // textScaleFactor: 1.5,
-                    style: TextStyle(
-                      color: Colors.black54,
-                    ),
-                  ),
-                  // trailing: const Icon(Icons.req),
-                  subtitle: Text(
-                      '\$ ${requestData.data['price']}',
-                      style: TextStyle(
-                        color: Colors.black54,
-                      )
-                  ),
-                  selected: true,
-                  onTap: () {
-
-                  },
-                ),
-              ),
             ],
           )
       ),
@@ -441,9 +407,14 @@ class AuthoriseScreen extends StatelessWidget {
         ),
         SizedBox(width: 10,),
         ElevatedButton(
-          onPressed: () {
-            showActionDialog("Transfer mine", Colors.black54, "Are you sure you want to transfer mine", context);
+          onPressed: () async {
+            bool approve = await showActionDialog(requestData.requestType, Colors.black54, "Are you sure you want to approve ${requestData.requestType}", context);
             // Button action goes here
+            if(approve){
+              FirebaseDB firebaseDB = FirebaseDB();
+              bool updated = await firebaseDB.verifyMine(context, requestData.data['mineId'] );
+
+            }
           },
           style: ElevatedButton.styleFrom(
             // backgroundColor: Colors.red,

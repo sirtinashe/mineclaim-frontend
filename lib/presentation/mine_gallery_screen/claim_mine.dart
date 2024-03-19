@@ -18,27 +18,28 @@ import 'package:mineclaim/apis/firebase_db.dart';
 
 
 // ignore_for_file: must_be_immutable
-class AddNewMineScreen extends StatefulWidget {
-  AddNewMineScreen({Key? key}) : super(key: key);
+class ClaimMineDetails extends StatefulWidget {
+  ClaimMineDetails({Key? key}) : super(key: key);
 
   @override
-  State<AddNewMineScreen> createState() => _AddNewMineScreenState();
+  State<ClaimMineDetails> createState() => _ClaimMineDetailsState();
 }
 
-class _AddNewMineScreenState extends State<AddNewMineScreen> {
+class _ClaimMineDetailsState extends State<ClaimMineDetails> {
   TextEditingController addressController = TextEditingController();
 
   TextEditingController gpsGPSLongitudeController = TextEditingController();
-  TextEditingController claimantController = TextEditingController();
+  TextEditingController transfereeController = TextEditingController();
 
 
-  TextEditingController priceController = TextEditingController();
+  TextEditingController contactDetailsController = TextEditingController();
   final FocusNode addressFocusNode = FocusNode();
   final FocusNode gpsLongitudeFocusNode  =  FocusNode();
   final FocusNode addressNode = FocusNode();
-  final FocusNode priceFocusNode =  FocusNode();
+  final FocusNode contactDetailsFocusNode =  FocusNode();
   final FocusNode areaFocusNode = FocusNode();
-  final FocusNode claimantNode = FocusNode();
+  final FocusNode transfereeFocusNode = FocusNode();
+
 
   String gpsLatitude = "none";
   String gpsLongitude = "none";
@@ -72,7 +73,7 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
   // final _formKey = GlobalKey<FormState>();
 
 // Method to validate TextField controllers
-   validateInputs() {
+  validateInputs() {
     if (_formKey.currentState!.validate()) {
       // If all data are correct then save data to out variables
       _formKey.currentState!.save();
@@ -84,22 +85,18 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
       return false ;
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        // appBar: _buildAppBar(context),
-        // appBar: MyAppBar(
-        //   title: Text("Add New Mine"),
-        // ),
         appBar: AppBar(
           elevation: 2,
           foregroundColor: Colors.white,
           centerTitle: true,
           backgroundColor: PrimaryColors().appDarkBlue,
           title: Text(
-            "Add New Mine",
+            "Claim Mine",
             style: TextStyle(
               color: Colors.white,
             ),
@@ -126,38 +123,38 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
                                   decoration: BoxDecoration(
                                       color: appTheme.gray300,
                                       borderRadius:
-                                          BorderRadius.circular(3.h)),
+                                      BorderRadius.circular(3.h)),
                                   child: ClipRRect(
                                       borderRadius:
-                                          BorderRadius.circular(3.h),
+                                      BorderRadius.circular(3.h),
                                       child: LinearProgressIndicator(
                                           value: 0.5,
                                           backgroundColor: appTheme.gray300,
                                           valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                  theme.colorScheme
-                                                      .primary)
+                                          AlwaysStoppedAnimation<Color>(
+                                              theme.colorScheme
+                                                  .primary)
                                       )
                                   )
                               ),
                               SizedBox(height: 26.v),
                               Text("Mine Details",
                                   style:
-                                      CustomTextStyles.titleMediumBold_1),
+                                  CustomTextStyles.titleMediumBold_1),
                               SizedBox(height: 13.v),
                               // _buildMineLocation(context),
-                              _buildClaimant(context),
-                              SizedBox(height: 13.v),
+                              _transfereeName(context),
+                              SizedBox(height: 12.v),
 
                               _buildAddressField(context),
-                              SizedBox(height: 12.v),
-                              _selectLocation(context),
                               // SizedBox(height: 12.v),
-                              // _buildPrice(context),
-                              
+                              // _selectLocation(context),
                               SizedBox(height: 12.v),
-                              _AreaField(context),
-                              SizedBox(height: 5.v),
+                              _contactDetails(context),
+
+                              SizedBox(height: 12.v),
+                              // _AreaField(context),
+                              // SizedBox(height: 5.v),
                               _addFile(context),
                             ]
                         )
@@ -190,46 +187,43 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
   }
 
 
+  Widget _transfereeName(BuildContext context) {
+    return CustomTextFormField(
+      controller: transfereeController,
+      hintText: "Transferee Name",
+      textInputType: TextInputType.text,
+      autofocus: false,
+      focusNode: transfereeFocusNode,
+      validator:(value){
+        if(value!.isEmpty ){
+          return "Please provide transferee name" ;
+        }
+      },
+    );
+  }
 
   /// Section Widget
   Widget _buildAddressField(BuildContext context) {
     return CustomTextFormField(
-        controller: addressController,
-        hintText: "Physical Address",
-        textInputType: TextInputType.text,
-        autofocus: false,
-        focusNode: addressNode,
-        validator:(value){
-          if(value!.isEmpty ){
-            return "Please provide address" ;
-          }
-        },
-    );
-  }
-
-  Widget _buildClaimant(BuildContext context) {
-    return CustomTextFormField(
-      controller: claimantController,
-      hintText: "Claimant Name",
+      controller: addressController,
+      hintText: "Physical Address",
       textInputType: TextInputType.text,
       autofocus: false,
-      focusNode: claimantNode,
+      focusNode: addressNode,
       validator:(value){
         if(value!.isEmpty ){
-          return "Please provide claimant name" ;
+          return "Please provide address" ;
         }
       },
     );
   }
 
 
-
-
   /// Section Widget
-  Widget _buildPrice(BuildContext context) {
+  Widget _contactDetails(BuildContext context) {
     return CustomTextFormField(
-        controller: priceController, hintText: "Price in USD",
-      focusNode: priceFocusNode,
+      controller: contactDetailsController, hintText: "Contact Details",
+      focusNode: contactDetailsFocusNode,
       autofocus: false,
       validator:(value){
         if(value!.isEmpty || double.tryParse(value) == null){
@@ -242,24 +236,24 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
   /// Section Widget
   Widget _AreaField(BuildContext context) {
     return CustomTextFormField(
-        controller: areaController,
-        hintText: "Area in sqm",
-        textInputAction: TextInputAction.done,
-        textInputType: TextInputType.number,
-         focusNode: areaFocusNode,
-         autofocus: false,
-        validator:(value){
-          if(value!.isEmpty || double.tryParse(value) == null){
-            return "Provide a valid area" ;
-          }
-        },
+      controller: areaController,
+      hintText: "Area in sqm",
+      textInputAction: TextInputAction.done,
+      textInputType: TextInputType.number,
+      focusNode: areaFocusNode,
+      autofocus: false,
+      validator:(value){
+        if(value!.isEmpty || double.tryParse(value) == null){
+          return "Provide a valid area" ;
+        }
+      },
     );
   }
 
   /// Section Widget
   Widget _buildNext(BuildContext context) {
     return CustomElevatedButton(
-        text: "Add New Mine",
+        text: "Claim mine",
         onPressed: () async {
           // onTapNext(context);
           // addNewMine(context);
@@ -312,15 +306,15 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              child:Text(
-                "GPS Coordinates (optional)",
+                child:Text(
+                  "GPS Coordinates (optional)",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     // fontSize: 16,
                     // fontWeight: FontWeight.bold,
                     color: Colors.black54,
                   ),
-              )
+                )
             ),
             SizedBox(
 
@@ -346,29 +340,29 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
                 borderRadius: BorderRadius.circular(16.0),
               ),
               child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Icon(
-                        Icons.file_copy,
-                        color: Colors.black54,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: Icon(
+                          Icons.file_copy,
+                          color: Colors.black54,
+                        ),
                       ),
-                    ),
-                    SizedBox(
+                      SizedBox(
 
-                    ),
-                    Text(
-                      _selectedFile == null ? 'Upload Mine Profile' : _selectedFile!.path,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black54,
                       ),
-                    ),
-                  ],
-                )
+                      Text(
+                        _selectedFile == null ? 'Upload Prospectus Licence' : _selectedFile!.path,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  )
               ),
             ),
           ),
@@ -395,8 +389,6 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
       pageTransitionAnimation: PageTransitionAnimation.cupertino,
     );
   }
-
-
   addNewMine(BuildContext context) async {
     showProcessingDialog(context);
     FirebaseDB firebaseDB = FirebaseDB();
@@ -405,9 +397,9 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
         context,
         addressController.text,
         areaController.text,
+        contactDetailsController.text,
         gpsLatitude,
-        gpsLongitude,
-        claimantController.text,
+        gpsLongitude
     );
     // dismissDialog(context);
   }

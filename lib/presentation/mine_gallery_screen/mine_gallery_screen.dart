@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mineclaim/core/app_export.dart';
 import 'package:mineclaim/presentation/confirm_request_screen/confirm_request_screen.dart';
+import 'package:mineclaim/presentation/mine_gallery_screen/claim_mine.dart';
 import 'package:mineclaim/presentation/my_home_empty_screen/empty_mines.dart';
 import 'package:mineclaim/widgets/app_bar/appbar_leading_iconbutton.dart';
 import 'package:mineclaim/widgets/app_bar/appbar_subtitle_two.dart';
@@ -274,15 +275,13 @@ class MineGallery extends StatelessWidget {
               SizedBox(height: 13.v),
               ElevatedButton(
                 onPressed: () async {
-                  bool action = await showActionDialog("Transfer Ownership", Colors.black54, "Are you sure you want to request transfer of ownership to your account", context);
-                  if (action){
-                    PersistentNavBarNavigator.pushNewScreen(
-                      context,
-                      screen: ConfirmRequestScreen(),
-                      withNavBar: false, // OPTIONAL VALUE. True by default.
-                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                    );
-                  }
+                  PersistentNavBarNavigator.pushNewScreen(
+                    context,
+                    screen: ClaimMineDetails(),
+                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+
                   // Button action goes here
                 },
                 style: ElevatedButton.styleFrom(
@@ -299,7 +298,7 @@ class MineGallery extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  "Buy mine",
+                  "Claim mine",
                   style: TextStyle(fontSize: 20.0,color: Colors.white),
                 ),
               ),

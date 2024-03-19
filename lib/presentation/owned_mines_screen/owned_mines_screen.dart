@@ -94,27 +94,28 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
 
         ),
 
-        body: SizedBox(
-            width: double.maxFinite,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-              Container(
-                  color: Color(0xFFE7EEFA),
-                  height: 15.v,
-                  // child: SizedBox(height: 15.v)
-              ),
-              _buildTabview(context),
-              // Container(
-              //   height: 10.v,
-              //   color: Color(0xFFE7EEFA),
-              // ),
-              tabView(context)
-            ]
-            )
-        ),
+        // body: SizedBox(
+        //     width: double.maxFinite,
+        //     child: Column(
+        //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //         children: [
+        //       Container(
+        //           color: Color(0xFFE7EEFA),
+        //           height: 15.v,
+        //           // child: SizedBox(height: 15.v)
+        //       ),
+        //       _buildTabview(context),
+        //       // Container(
+        //       //   height: 10.v,
+        //       //   color: Color(0xFFE7EEFA),
+        //       // ),
+        //       tabView(context)
+        //     ]
+        //     )
+        // ),
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
+          heroTag: "btn1",
           // isExtended: true,
           child: Icon(Icons.add),
           backgroundColor: Colors.white,
