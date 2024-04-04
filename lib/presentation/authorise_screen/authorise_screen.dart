@@ -412,6 +412,7 @@ class AuthoriseScreen extends StatelessWidget {
             // Button action goes here
             if(approve){
               FirebaseDB firebaseDB = FirebaseDB();
+              print("Mine ID: ${requestData.data['mineId']}");
               bool updated = await firebaseDB.verifyMine(context, requestData.data['mineId'] );
 
             }

@@ -24,7 +24,7 @@ class RequestSerializer {
             "area": request['area'],
             "claimant": "${request['claimant']}",
           },
-          imagePath: 'https://www.researchgate.net/publication/352676417/figure/fig1/AS:1037724651909121@1624424245893/Satellite-location-for-Mimosa-Mine-Source-Google-maps.png',
+          imagePath: request['documentUrl'],
           requestTypes: RequestTypes.ADD_MINE,
       ));
     }

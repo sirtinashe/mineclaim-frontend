@@ -134,5 +134,6 @@ import 'package:mineclaim/core/app_export.dart';
 }
 
 dismissDialog(context) async{
-  Navigator.pop(context);
+  // Navigator.pop(context);
+  Navigator.of(context, rootNavigator: true).pop();
 }

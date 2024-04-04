@@ -49,7 +49,7 @@ class PastToursScreen extends StatelessWidget {
     return CustomAppBar(
         leadingWidth: 60.h,
         centerTitle: true,
-        title: AppbarSubtitleTwo(text: "Mine Collection"),
+        title: AppbarSubtitleTwo(text: "sMine Collection"),
         styleType: Style.bgFill
     );
   }

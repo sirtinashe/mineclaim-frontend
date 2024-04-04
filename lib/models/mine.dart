@@ -10,7 +10,7 @@ class Mine {
   String requestType;
   String requestStatus;
   String claimant;
-
+  String documentUrl;
   Mine({
     required this.mineId,
     required this.mineLocation,
@@ -22,25 +22,28 @@ class Mine {
     required this.mineOwner,
     required this.requestType,
     required this.requestStatus,
-    required this.claimant
+    required this.claimant,
+    required this.documentUrl
+
 
 
   });
 
   factory Mine.fromJson(Map<String, dynamic> json) {
     return Mine(
-      mineId: json['mineId'],
-      mineLocation: json['mineLocation'],
-      area: json['area'],
+      mineId: json['mineId'].toString(),
+      mineLocation: json['mineLocation'].toString(),
+      area: json['area'].toString(),
 
-      gpsLatitude: json['gpsLatitude'],
-      gpsLongitude: json['gpsLongitude'],
-      timeAdded: json['timeAdded'],
-      verified: json['verified'],
-      mineOwner: json['mineOwner'],
-      requestType: json['requestType'],
-      requestStatus: json['requestStatus'],
-      claimant: json['claimant']
+      gpsLatitude: json['gpsLatitude'].toString(),
+      gpsLongitude: json['gpsLongitude'].toString(),
+      timeAdded: json['timeAdded'].toString(),
+      verified: json['verified'] == "True" ? true : false ,
+      mineOwner: json['mineOwner'].toString(),
+      requestType: json['requestType'].toString(),
+      requestStatus: json['requestStatus'].toString(),
+      claimant: json['claimant'].toString(),
+      documentUrl: json['documentUrl'].toString()
     );
   }
   // to convert the object to a json object
@@ -57,7 +60,8 @@ class Mine {
       'mineOwner': mineOwner,
       'requestStatus':requestStatus,
       'requestType':requestType,
-      'claimant':claimant
+      'claimant':claimant,
+      'documentUrl':documentUrl
 
     };
   }

@@ -90,9 +90,34 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
               color: Colors.white,
             ),
           ),
+actions: [
+            IconButton(
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: AddNewMineScreen(),
+                  withNavBar: false, // OPTIONAL VALUE. True by default.
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+
+              },
+            ),
+            // PopupMenuButton(
+            //   itemBuilder: (ctx) => [
+            //     _buildPopupMenuItem('Add new mine'),
+            //
+            //   ],
+            // )
+          ],
+
           // bottom: _buildTabview(context),
 
         ),
+        body: MineGallery(),
 
         // body: SizedBox(
         //     width: double.maxFinite,
@@ -117,15 +142,18 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
         floatingActionButton: FloatingActionButton(
           heroTag: "btn1",
           // isExtended: true,
-          child: Icon(Icons.add),
+          child: Icon(Icons.refresh),
           backgroundColor: Colors.white,
           onPressed: () {
-            PersistentNavBarNavigator.pushNewScreen(
-              context,
-              screen: AddNewMineScreen(),
-              withNavBar: false, // OPTIONAL VALUE. True by default.
-              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            );
+            // PersistentNavBarNavigator.pushNewScreen(
+            //   context,
+            //   screen: AddNewMineScreen(),
+            //   withNavBar: false, // OPTIONAL VALUE. True by default.
+            //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            // );
+            setState(() {
+
+            });
             // Navigator.pushNamed(context, AppRoutes.addNewPropertyAddressScreen);
           },
         ),

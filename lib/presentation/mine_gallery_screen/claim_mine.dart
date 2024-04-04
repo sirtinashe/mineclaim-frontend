@@ -399,7 +399,8 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
         areaController.text,
         contactDetailsController.text,
         gpsLatitude,
-        gpsLongitude
+        gpsLongitude,
+        "none",
     );
     // dismissDialog(context);
   }

@@ -3,19 +3,22 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mineclaim/models/mine.dart';
 
 import '../widgets/dialogs.dart';
 
 class MineclaimApi {
   late BuildContext context;
-  MineclaimApi(BuildContext context) {
-    this.context = context;
+  MineclaimApi(BuildContext ctx) {
+    this.context = ctx;
   }
   String method = "";
+
   httpsRequest(payload, apiUrl, method) async {
     var client = http.Client();
     final http.Response response;
-    showProcessingDialog(context);
+
+    // showProcessingDialog(context);
 
     try {
       switch (method) {
@@ -32,6 +35,9 @@ class MineclaimApi {
               body: payload)
               .timeout(const Duration(seconds: 15)
           );
+          if (kDebugMode) {
+            // print("Post response: ${response.body}");
+          }
           break;
         case "GET":
           response = await client.get(
@@ -63,46 +69,89 @@ class MineclaimApi {
 
       // Handle the response status code in a single place
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Navigator.of(context).pop();
+        // await dismissDialog(context);
         return jsonDecode(response.body);
       } else {
-        Navigator.of(context).pop();
+
         print("RESPONSE: ${response.body}");
         showInformativeDialog("Message", Colors.black54,
             jsonDecode(response.body)['message'], context);
-        return -1;
+        return {
+          "success": false,
+          "message": "An error occurred",
+          "data": []
+
+        };
       }
     } on FormatException catch (e) {
-      // Handle the format exception
-      print("FormatException $e");
-      // Navigator.of(context).pop();
+      // await dismissDialog(context);
       showInformativeDialog('Error', Colors.red,
           "Sorry, server info error. Try again later!", context);
-      return -1;
+      return {
+        "success": false,
+        "message": "Format error occurred",
+        "data": []
+
+      };
     } on SocketException catch (e) {
-      // Handle the socket exception
-      print("SocketException $e");
-      // Navigator.of(context).pop();
+
+      // await dismissDialog(context);
       showInformativeDialog('Error', Colors.red,
           "There is a problem with the network connection!", context);
-      return -1;
+      return {
+        "success": false,
+        "message": "Network error occurred",
+      };
     } on Exception catch (_, e) {
-      // Handle any other exception
-      print("Exception captured $e");
-      // Navigator.of(context).pop();
+      // await dismissDialog(context);
       showInformativeDialog(
           'Error', Colors.red, "An unknown error occurred!", context);
-      return -1;
+      return {
+        "success": false,
+        "message": "Unknown error occurred",
+        "data": []
+      };
     } finally {
-      // Perform some cleanup actions
+
       client.close();
     }
   }
 
   // Future add mine
   Future addMine(Map<String, dynamic> payload) async {
-    String apiUrl = "https://mineclaim.com/api/v1/mines";
+    String apiUrl = "http://10.0.2.2:5000/mineByOwner";
     String method = "POST";
     return await httpsRequest(jsonEncode(payload), apiUrl, method);
+  }
+  getMines(String mineOwner) async {
+    String apiUrl = "http://10.0.2.2:5000/mineByOwner";
+    String method = "POST";
+    var payload = {
+      "ownerId": mineOwner,
+    };
+    print("From getMines $mineOwner");
+    final minesJson =  await httpsRequest(jsonEncode(payload), apiUrl, method);
+
+    print("Json response: $minesJson");
+    if (minesJson['success']) {
+      List<Mine> mines = [] ;
+      for (var mine in minesJson['data']) {
+        mines.add(Mine.fromJson(mine));
+      }
+      // Mine mine = Mine.fromJson(minesJson);
+      // mines.add(mine);
+      print("Mines: $mines");
+
+
+      return {
+        "success": true,
+        "data": mines,
+        "message": "Mines retrieved successfully"
+      };
+
+
+    }
+
+    return minesJson;
   }
 }
