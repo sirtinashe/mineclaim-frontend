@@ -145,6 +145,11 @@ class _MineGalleryState extends State<MineGallery> {
                 );
               } else {
                 print(snapshot.data);
+                if(!snapshot.data!['success']){
+                  minesAvailable = false;
+                  return EmptyMinesScreen();
+
+                }
                 List<Mine> mines= snapshot.data!['data'] ?? [];
 
 
