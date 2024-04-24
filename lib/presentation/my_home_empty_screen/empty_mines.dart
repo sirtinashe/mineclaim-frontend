@@ -18,19 +18,19 @@ class EmptyMinesScreen extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 7.v),
-                      CustomImageView(
-                          imagePath: ImageConstant.imgFrame,
-                          height: 255.adaptSize,
-                          width: 255.adaptSize),
-                      SizedBox(height: 63.v),
-                      Text("Ready to buy your mine?",
+                      // SizedBox(height: 7.v),
+                      // CustomImageView(
+                      //     imagePath: "",
+                      //     height: 255.adaptSize,
+                      //     width: 255.adaptSize),
+                      SizedBox(height: 20.v),
+                      Text("Claim your mine?",
                           style: theme.textTheme.titleLarge),
                       SizedBox(height: 6.v),
                       SizedBox(
                           width: 324.h,
                           child: Text(
-                              "Relax is making it simpler to your home and move forward.",
+                              "You haven't claimed a mine",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
@@ -40,7 +40,7 @@ class EmptyMinesScreen extends StatelessWidget {
                       CustomElevatedButton(
                           height: 45.v,
                           width: 155.h,
-                          text: "Buy a mine",
+                          text: "Claim a mine",
                           onPressed: () {
                             onTapAddProprty(context);
                           })

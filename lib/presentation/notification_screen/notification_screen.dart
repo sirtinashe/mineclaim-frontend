@@ -80,6 +80,31 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 for (var doc in documents.docs) {
                   print(doc.data());
                 }
+                if(documents.size == 0){
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Image.asset(
+                        //   "assets/images/empty_requests.png",
+                        //   height: 200.h,
+                        //   width: 200.h,
+                        // ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Text(
+                          "No notifications available",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
 
                 return GroupedListView<dynamic, String>(
                     shrinkWrap: true,

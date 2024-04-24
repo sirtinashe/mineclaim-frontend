@@ -208,6 +208,7 @@ class SignUpScreen extends StatelessWidget {
     Navigator.pushNamed(context, AppRoutes.signInScreen);
   }
 
+
   onTapSignUpWithEmail(BuildContext context) async {
     try {
       //

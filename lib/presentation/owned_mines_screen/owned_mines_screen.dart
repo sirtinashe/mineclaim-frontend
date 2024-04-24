@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:mineclaim/apis/api_calls.dart';
 import 'package:mineclaim/core/app_export.dart';
+import 'package:mineclaim/globals.dart';
 import 'package:mineclaim/presentation/mine_gallery_screen/mine_gallery_screen.dart';
 import 'package:mineclaim/presentation/my_home_empty_screen/empty_mines.dart';
 
@@ -9,6 +12,9 @@ import 'package:mineclaim/widgets/app_bar/custom_app_bar.dart';
 import 'package:mineclaim/widgets/custom_checkbox_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+import '../../apis/firebase_db.dart';
+import '../../models/mine.dart';
+import '../../widgets/dialogs.dart';
 import '../add_new_mine_screen/add_new_mine_screen.dart';
 import '../documents_picker/documents_picker.dart';
 
@@ -85,33 +91,33 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
           centerTitle: true,
           backgroundColor: PrimaryColors().appDarkBlue,
           title: Text(
-            "Mine Collection",
+            "Claimed Mines",
             style: TextStyle(
               color: Colors.white,
             ),
           ),
 actions: [
-            IconButton(
-              icon: Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                PersistentNavBarNavigator.pushNewScreen(
-                  context,
-                  screen: AddNewMineScreen(),
-                  withNavBar: false, // OPTIONAL VALUE. True by default.
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
-
-              },
-            ),
-            // PopupMenuButton(
-            //   itemBuilder: (ctx) => [
-            //     _buildPopupMenuItem('Add new mine'),
+            // IconButton(
+            //   icon: Icon(
+            //     Icons.add,
+            //     color: Colors.white,
+            //   ),
+            //   onPressed: () {
+            //     PersistentNavBarNavigator.pushNewScreen(
+            //       context,
+            //       screen: AddNewMineScreen(),
+            //       withNavBar: false, // OPTIONAL VALUE. True by default.
+            //       pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            //     );
             //
-            //   ],
-            // )
+            //   },
+            // ),
+            PopupMenuButton(
+              itemBuilder: (ctx) => [
+                _buildPopupMenuItem('Coming Soon'),
+
+              ],
+            )
           ],
 
           // bottom: _buildTabview(context),
@@ -139,24 +145,85 @@ actions: [
         //     )
         // ),
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          heroTag: "btn1",
-          // isExtended: true,
-          child: Icon(Icons.refresh),
-          backgroundColor: Colors.white,
-          onPressed: () {
-            // PersistentNavBarNavigator.pushNewScreen(
-            //   context,
-            //   screen: AddNewMineScreen(),
-            //   withNavBar: false, // OPTIONAL VALUE. True by default.
-            //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            // );
-            setState(() {
 
-            });
-            // Navigator.pushNamed(context, AppRoutes.addNewPropertyAddressScreen);
-          },
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   heroTag: "btn1",
+        //   // isExtended: true,
+        //   child: Icon(Icons.add),
+        //   backgroundColor: Colors.white,
+        //   onPressed: () {
+        //     PersistentNavBarNavigator.pushNewScreen(
+        //       context,
+        //       screen: AddNewMineScreen(),
+        //       withNavBar: false, // OPTIONAL VALUE. True by default.
+        //       pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        //     );
+        //     // setState(() {
+        //     //
+        //     // });
+        //     // Navigator.pushNamed(context, AppRoutes.addNewPropertyAddressScreen);
+        //   },
+        // ),
+        floatingActionButton: SpeedDial(
+          backgroundColor: Colors.white,
+          icon: Icons.add,
+          children: [
+            SpeedDialChild(
+                child: Icon(Icons.crop_landscape),
+              label: "Claim mine",
+              onTap: () async {
+                String? mineId = await claimMineDialog(context);
+                if (mineId != null) {
+                  // Perform your logic with the mineId
+                  // showProcessingDialog(context);
+                  final mineData = await MineclaimApi(context).getMineById(mineId, '');
+                  print("Data ${mineData}");
+                  // dismissDialog(context);
+                  if (!mineData['success']){
+                    showInformativeDialog("Mine Information", Colors.black45, mineData['message'], context);
+                  }else{
+                    showProcessingDialog(context);
+                    FirebaseDB firebaseDB = FirebaseDB();
+                    Mine mine =  mineData['data'];
+                    if(mine.mineOwner == globalUuid){
+                      firebaseDB.addClaimedMines(context, mine);
+                    }else{
+                      dismissDialog(context);
+                      // check to see if the mine exist in firebase
+                      bool isMineExist = await firebaseDB.checkMineExistence(mineId);
+                      showInformativeDialog("Mine Information", Colors.black45, "You are not the owner of this mine , mine belongs to ${mine.mineOwner}", context);
+                      print("Mine Exist $isMineExist");
+                      if(isMineExist){
+                        // showInformativeDialog("Mine Information", Colors.black45, "Mine already exist in your collection", context);
+                        // delete the mine from firebase
+                        bool isDeleted = firebaseDB.deleteMine(context ,mineId);
+
+                      }
+
+
+                    }
+
+                  }
+
+                  // print("Mine Id ${mineId}");
+
+                }
+              }
+            ),
+            SpeedDialChild(
+                child: Icon(Icons.add),
+              onTap: (){
+                PersistentNavBarNavigator.pushNewScreen(
+                  context,
+                  screen: AddNewMineScreen(),
+                  withNavBar: false, // OPTIONAL VALUE. True by default.
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
+              },
+              label:  "Add Mine"
+            ),
+          ],
+        )
     );
   }
 
@@ -366,4 +433,6 @@ actions: [
   onTapArrowLeft(BuildContext context) {
     Navigator.pop(context);
   }
+
+
 }

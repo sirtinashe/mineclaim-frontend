@@ -38,6 +38,7 @@ class _RequestHomeScreenState extends State<RequestHomeScreen> {
     stream =  FirebaseFirestore.instance
         .collection('mines')
         .where('requestStatus', isEqualTo: "Pending")
+
         .snapshots();
   }
   @override

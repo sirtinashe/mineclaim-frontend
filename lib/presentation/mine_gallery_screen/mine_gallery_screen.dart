@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mineclaim/core/app_export.dart';
 import 'package:mineclaim/globals.dart';
@@ -10,6 +11,7 @@ import 'package:mineclaim/widgets/app_bar/custom_app_bar.dart';
 import 'package:mineclaim/widgets/custom_checkbox_button.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+import '../../helper.dart';
 import '../../models/mine.dart';
 import '../../widgets/dialogs.dart';
 import '../add_new_mine_screen/add_new_mine_screen.dart';
@@ -17,6 +19,7 @@ import '../documents_picker/documents_picker.dart';
 
 // import api calls
 import '../../apis/api_calls.dart';
+import '../transfer_mine/transfer_mine_screen.dart';
 
 // ignore_for_file: must_be_immutable
 class MineGallery extends StatefulWidget {
@@ -28,11 +31,12 @@ class MineGallery extends StatefulWidget {
 
 class _MineGalleryState extends State<MineGallery> {
   bool complete = false;
-  late Future<Map<String,dynamic>> futureMines;
+  // late Future<Map<String,dynamic>> futureMines;
 
   // Column(children: [
   bool minesAvailable = false ;
   String message = "No mines available";
+  Stream<QuerySnapshot>? stream;
 
   Future<Map<String ,dynamic>>_getMines() async {
 
@@ -41,7 +45,10 @@ class _MineGalleryState extends State<MineGallery> {
   @override
   void initState() {
     super.initState();
-    futureMines = _getMines();
+    // futureMines = _getMines();
+    stream = FirebaseFirestore.instance
+        .collection('claimed_by_$globalUuid')
+        .snapshots();
 
 
   }
@@ -52,21 +59,7 @@ class _MineGalleryState extends State<MineGallery> {
       backgroundColor: Color(0xFFE7EEFA),
       // appBar: _buildAppBar(context),
       body: !minesAvailable ? _mineAvailable(context) : EmptyMinesScreen(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        // isExtended: true,
-        child: Icon(Icons.add,color: Color(0xFF152A47),),
-        backgroundColor: Color(0xFFE7EEFA),
-        onPressed: () {
-          PersistentNavBarNavigator.pushNewScreen(
-            context,
-            screen: AddNewMineScreen(),
-            withNavBar: false, // OPTIONAL VALUE. True by default.
-            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-          );
-          // Navigator.pushNamed(context, AppRoutes.addNewPropertyAddressScreen);
-        },
-      ),
+
     );
   }
 
@@ -136,8 +129,8 @@ class _MineGalleryState extends State<MineGallery> {
             padding: EdgeInsets.symmetric(horizontal: 24.h),
             // child: Center(child: Text("Mines available",style: TextStyle(fontSize: 20.0,color: Colors.black),))
             // create child future builder to fetch mines
-            child: FutureBuilder<Map<String,dynamic>>(
-                future: futureMines,
+            child: StreamBuilder<QuerySnapshot>(
+                stream: stream,
                 builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
@@ -145,15 +138,20 @@ class _MineGalleryState extends State<MineGallery> {
                 );
               } else {
                 print(snapshot.data);
-                if(!snapshot.data!['success']){
-                  minesAvailable = false;
-                  return EmptyMinesScreen();
+                // final documents = snapshot.data as QuerySnapshot;
+                // List<DocumentSnapshot> documents = snapshot.data!.docs;
+                // List<Mine> mines = snapshot.data!.docs.map((doc) => Mine.fromJson(doc.data())).toList();
 
-                }
-                List<Mine> mines= snapshot.data!['data'] ?? [];
+                List<Mine> mines = snapshot.data!.docs.map((doc) => Mine.fromJson(doc.data() as Map<String, dynamic>)).toList();
+                // if(!snapshot.data!['success']){
+                //   minesAvailable = false;
+                //   return EmptyMinesScreen();
+                //
+                // }
+                // List<Mine> mines= snapshot.data!['data'] ?? [];
 
 
-                message = snapshot.data!['message'];
+                // message = snapshot.data!['message'];
                 if (mines.length == 0) {
                   minesAvailable = false;
                   // setState(() {
@@ -168,13 +166,15 @@ class _MineGalleryState extends State<MineGallery> {
                 } else {
                   return ListView.builder(
                       // padding:  EdgeInsets.only(bottom: 20.v),
-                      itemCount: mines.length ?? 0,
+                      itemCount: mines.length,
                       itemBuilder: (BuildContext context, int index){
+                        // Mine mine  =  RequestSerializer.serializeClaimedMines(documents[index].data());
+                        
                         return Card(
                           child: Padding(
                             // padding: const EdgeInsets.all(8.0),
                             padding: EdgeInsets.only(bottom: 10.0),
-                            child: _buildOne(context, mines[index]),
+                            child: _buildOne(context,mines[index] ),
                           ),
                         );
                       }
@@ -341,31 +341,41 @@ class _MineGalleryState extends State<MineGallery> {
               //   mine.documentUrl,
               // ),
 
-              // SizedBox(height: 13.v),
-              // ElevatedButton(
-              //   onPressed: () async {
-              //     _getMines();
-              //
-              //     // Button action goes here
-              //   },
-              //   style: ElevatedButton.styleFrom(
-              //     // backgroundColor: Colors.red,
-              //     backgroundColor: Color(0xFF152A47),
-              //
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
-              //     ),
-              //     elevation: 4.0, // Adjust the elevation as needed
-              //     padding: EdgeInsets.symmetric(
-              //         horizontal: 40.0.v,
-              //         vertical: 22.0.v
-              //     ),
-              //   ),
-              //   child: Text(
-              //     "Claim mine",
-              //     style: TextStyle(fontSize: 20.0,color: Colors.white),
-              //   ),
-              // ),
+              SizedBox(height: 13.v),
+              ElevatedButton(
+                onPressed: () async {
+                  // buildDialog(context);
+
+                  // navigate to ConfirmRequestScreen
+                  PersistentNavBarNavigator.pushNewScreen(
+                    context,
+                    screen: TransferMineScreen(
+                      mine: mine,
+                    ),
+                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+
+                  // Button action goes here
+                },
+                style: ElevatedButton.styleFrom(
+                  // backgroundColor: Colors.red,
+                  backgroundColor: Color(0xFF152A47),
+
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                  ),
+                  elevation: 4.0, // Adjust the elevation as needed
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 40.0.v,
+                      vertical: 22.0.v
+                  ),
+                ),
+                child: Text(
+                  "Transfer",
+                  style: TextStyle(fontSize: 20.0,color: Colors.white),
+                ),
+              ),
             ]
         )
     );

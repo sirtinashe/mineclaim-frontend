@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mineclaim/globals.dart';
 import 'package:mineclaim/presentation/my_home_empty_screen/empty_mines.dart';
 import 'package:mineclaim/presentation/notification_screen/notification_screen.dart';
 
@@ -10,6 +11,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../confirm_request_screen/confirm_request_screen.dart';
 
 import '../mine_gallery_screen/mine_gallery_screen.dart';
+import '../new_request_page/mine_transfer_request.dart';
 import '../new_request_page/request_home.dart';
 import '../owned_mines_screen/owned_mines_screen.dart';
 
@@ -32,8 +34,8 @@ class _MineclaimHomeState extends State<MineclaimHome> {
       body: PersistentTabView(
         context,
         controller: _controller,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
+        screens: globalEmail == "ministry@gmail.com" ?  _buildScreens():_buildMinersScreens() ,
+        items: globalEmail == "ministry@gmail.com" ? _navBarsItems() : _minersNavBarsItems(),
         confineInSafeArea: true,
         backgroundColor: Colors.white, // Default is Colors.white.
         handleAndroidBackButtonPress: true, // Default is true.
@@ -65,10 +67,51 @@ class _MineclaimHomeState extends State<MineclaimHome> {
       // MineGallery(),
       OwnedMines(),
       RequestHomeScreen(),
+      MineTransferRequest(),
       NotificationScreen(),
       SettingsScreen(),
 
 
+    ];
+  }
+
+  List<Widget> _buildMinersScreens() {
+    return [
+      // MineGallery(),
+      OwnedMines(),
+      NotificationScreen(),
+      SettingsScreen(),
+    ];
+  }
+
+  List<PersistentBottomNavBarItem> _minersNavBarsItems() {
+    return [
+      // PersistentBottomNavBarItem(
+      //   icon: Icon(Icons.collections),
+      //   title: ("Mine Gallery"),
+      //   activeColorPrimary: CupertinoColors.activeBlue,
+      //   inactiveColorPrimary: CupertinoColors.systemGrey,
+      // ),
+      PersistentBottomNavBarItem(
+        icon: Image.asset("assets/app_icons/home_final.png"),
+        // title: ("Mine Collection"),
+        activeColorPrimary: Color(0xFF152A47),
+        inactiveColorPrimary: Color(0xFF152A47),
+      ),
+      PersistentBottomNavBarItem(
+        // icon: Icon(Icons.notifications),
+        icon: Image.asset("assets/app_icons/notificationf.png"),
+        // title: ("Notifications"),
+        activeColorPrimary: Color(0xFF152A47),
+        inactiveColorPrimary: Color(0xFF152A47),
+      ),
+      PersistentBottomNavBarItem(
+        // icon: Icon(Icons.settings),
+        icon: Image.asset("assets/app_icons/setting.png"),
+        // title: ("Settings"),
+        activeColorPrimary: Color(0xFF152A47),
+        inactiveColorPrimary: Color(0xFF152A47),
+      ),
     ];
   }
 
@@ -81,27 +124,33 @@ class _MineclaimHomeState extends State<MineclaimHome> {
       //   inactiveColorPrimary: CupertinoColors.systemGrey,
       // ),
       PersistentBottomNavBarItem(
-        icon: Image.asset("assets/app_icons/home.png"),
+        icon: Image.asset("assets/app_icons/home_final.png"),
         // title: ("Mine Collection"),
         activeColorPrimary: Color(0xFF152A47),
         inactiveColorPrimary: Color(0xFF152A47),
       ),
       PersistentBottomNavBarItem(
-        icon: Image.asset("assets/app_icons/clipboard.png"),
+        icon: Image.asset("assets/app_icons/document.png"),
+        // title: ("Market Place"),
+        activeColorPrimary: Color(0xFF152A47),
+        inactiveColorPrimary: Color(0xFF152A47),
+      ),
+      PersistentBottomNavBarItem(
+        icon: Image.asset("assets/app_icons/code-pull-request.png"),
         // title: ("Market Place"),
         activeColorPrimary: Color(0xFF152A47),
         inactiveColorPrimary: Color(0xFF152A47),
       ),
       PersistentBottomNavBarItem(
         // icon: Icon(Icons.notifications),
-        icon: Image.asset("assets/app_icons/notification.png"),
+        icon: Image.asset("assets/app_icons/notificationf.png"),
         // title: ("Notifications"),
         activeColorPrimary: Color(0xFF152A47),
         inactiveColorPrimary: Color(0xFF152A47),
       ),
       PersistentBottomNavBarItem(
         // icon: Icon(Icons.settings),
-        icon: Image.asset("assets/app_icons/settings.png"),
+        icon: Image.asset("assets/app_icons/setting.png"),
         // title: ("Settings"),
         activeColorPrimary: Color(0xFF152A47),
         inactiveColorPrimary: Color(0xFF152A47),

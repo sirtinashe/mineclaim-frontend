@@ -12,46 +12,49 @@ import 'package:mineclaim/widgets/custom_elevated_button.dart';
 import 'package:mineclaim/widgets/custom_text_form_field.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+import '../../models/mine.dart';
 import '../../widgets/dialogs.dart';
 import '../location_screens/location_picker_screen.dart';
 import 'package:mineclaim/apis/firebase_db.dart';
 
-
 // ignore_for_file: must_be_immutable
-class ClaimMineDetails extends StatefulWidget {
-  ClaimMineDetails({Key? key}) : super(key: key);
+class TransferMineScreen extends StatefulWidget {
+  TransferMineScreen({Key? key, required this.mine}) : super(key: key);
+  final Mine mine;
 
   @override
-  State<ClaimMineDetails> createState() => _ClaimMineDetailsState();
+  State<TransferMineScreen> createState() => _TransferMineScreenState();
 }
 
-class _ClaimMineDetailsState extends State<ClaimMineDetails> {
+class _TransferMineScreenState extends State<TransferMineScreen> {
+
+
   TextEditingController addressController = TextEditingController();
 
   TextEditingController gpsGPSLongitudeController = TextEditingController();
-  TextEditingController transfereeController = TextEditingController();
+  TextEditingController claimantController = TextEditingController();
 
-
-  TextEditingController contactDetailsController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
   final FocusNode addressFocusNode = FocusNode();
-  final FocusNode gpsLongitudeFocusNode  =  FocusNode();
+  final FocusNode gpsLongitudeFocusNode = FocusNode();
   final FocusNode addressNode = FocusNode();
-  final FocusNode contactDetailsFocusNode =  FocusNode();
+  final FocusNode priceFocusNode = FocusNode();
   final FocusNode areaFocusNode = FocusNode();
-  final FocusNode transfereeFocusNode = FocusNode();
-
+  final FocusNode claimantNode = FocusNode();
 
   String gpsLatitude = "none";
   String gpsLongitude = "none";
 
-
   List<String> dropdownItemList = ["Item One", "Item Two", "Item Three"];
 
-  TextEditingController areaController = TextEditingController();
+  TextEditingController receiverController = TextEditingController();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   File? _selectedFile;
+  bool _isUploading = false;
+  double _uploadProgress = 0.0;
+  String fileUrl = "";
 
   Future<void> _pickFile() async {
     try {
@@ -60,6 +63,9 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
       if (result != null) {
         setState(() {
           _selectedFile = File(result.files.single.path!);
+
+          // FirebaseDB firebaseDB = FirebaseDB();
+          // firebaseDB.uploadFile(_selectedFile!);
         });
       } else {
         setState(() {
@@ -78,11 +84,11 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
       // If all data are correct then save data to out variables
       _formKey.currentState!.save();
       print('All inputs are valid');
-      return true ;
+      return true;
     } else {
       // If any data is incorrect, stop the form submission
       print('Some inputs are incorrect');
-      return false ;
+      return false;
     }
   }
 
@@ -90,13 +96,17 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
+        // appBar: _buildAppBar(context),
+        // appBar: MyAppBar(
+        //   title: Text("Add New Mine"),
+        // ),
         appBar: AppBar(
           elevation: 2,
           foregroundColor: Colors.white,
           centerTitle: true,
           backgroundColor: PrimaryColors().appDarkBlue,
           title: Text(
-            "Claim Mine",
+            "Transfer Mine",
             style: TextStyle(
               color: Colors.white,
             ),
@@ -122,40 +132,21 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
                                   width: 327.h,
                                   decoration: BoxDecoration(
                                       color: appTheme.gray300,
-                                      borderRadius:
-                                      BorderRadius.circular(3.h)),
+                                      borderRadius: BorderRadius.circular(3.h)),
                                   child: ClipRRect(
-                                      borderRadius:
-                                      BorderRadius.circular(3.h),
+                                      borderRadius: BorderRadius.circular(3.h),
                                       child: LinearProgressIndicator(
                                           value: 0.5,
                                           backgroundColor: appTheme.gray300,
                                           valueColor:
                                           AlwaysStoppedAnimation<Color>(
-                                              theme.colorScheme
-                                                  .primary)
-                                      )
-                                  )
-                              ),
-                              SizedBox(height: 26.v),
-                              Text("Mine Details",
-                                  style:
-                                  CustomTextStyles.titleMediumBold_1),
-                              SizedBox(height: 13.v),
-                              // _buildMineLocation(context),
-                              _transfereeName(context),
-                              SizedBox(height: 12.v),
-
-                              _buildAddressField(context),
-                              // SizedBox(height: 12.v),
-                              // _selectLocation(context),
-                              SizedBox(height: 12.v),
-                              _contactDetails(context),
-
-                              SizedBox(height: 12.v),
-                              // _AreaField(context),
-                              // SizedBox(height: 5.v),
-                              _addFile(context),
+                                              theme.colorScheme.primary)))),
+                              SizedBox(height: 150.v),
+                              _buildMineDetails(context),
+                              SizedBox(height: 20.v),
+                              _ReceiverField(context),
+                              SizedBox(height: 5.v),
+                              // _addFile(context),
                             ]
                         )
                     )
@@ -163,6 +154,127 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
             )
         ),
         bottomNavigationBar: _buildBtn(context));
+  }
+
+  /// Section Widget
+  Widget _buildMineDetails(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 0.h),
+      child:Card(
+        // elevation: 2.0,
+        // borderRadius: BorderRadius.circular(10.0),
+
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+
+
+              // SizedBox(
+              //   height: 3.v,
+              // ),
+              ListTile(
+                visualDensity: VisualDensity(
+                  vertical: -4,
+                ),
+                // textColor: Colors.black54,
+                tileColor: Colors.white54,
+                leading: const Icon(
+                  Icons.landscape_sharp,
+                  color: Colors.black54,
+                ),
+                title: const Text(
+                  'Mine ID:',
+                  // textScaleFactor: 1.5,
+                  style: TextStyle(
+                    color: Colors.black54,
+                  ),
+                ),
+                // trailing: const Icon(Icons.req),
+                subtitle: Text(
+                    widget.mine.mineId,
+                    style: TextStyle(
+                      color: Colors.black54,
+                    )
+                ),
+                selected: true,
+                onTap: () {
+
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 4.h,
+                  right: 4.h,
+                ),
+                child: ListTile(
+                  visualDensity: VisualDensity(
+                    vertical: -4,
+                  ),
+                  // textColor: Colors.black54,
+                  tileColor: Colors.white54,
+                  leading: const Icon(
+                    Icons.location_on_rounded,
+                    color: Colors.black54,
+                  ),
+                  title: const Text(
+                    'Mine Location',
+                    // textScaleFactor: 1.5,
+                    style: TextStyle(
+                      color: Colors.black54,
+                    ),
+                  ),
+                  // trailing: const Icon(Icons.req),
+                  subtitle: Text(
+                      widget.mine.mineId,
+                      style: TextStyle(
+                        color: Colors.black54,
+                      )
+                  ),
+                  selected: true,
+                  onTap: () {
+
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 4.h,
+                  right: 4.h,
+                ),
+                child: ListTile(
+                  visualDensity: VisualDensity(
+                    vertical: -4,
+                  ),
+                  // textColor: Colors.black54,
+                  tileColor: Colors.white54,
+                  leading: const Icon(
+                    Icons.landslide_outlined,
+                    color: Colors.black54,
+                  ),
+                  title: const Text(
+                    'Area',
+                    // textScaleFactor: 1.5,
+                    style: TextStyle(
+                      color: Colors.black54,
+                    ),
+                  ),
+                  // trailing: const Icon(Icons.req),
+                  subtitle: Text(
+                      widget.mine.area,
+                      style: TextStyle(
+                        color: Colors.black54,
+                      )
+                  ),
+                  selected: true,
+                  onTap: () {
+
+                  },
+                ),
+              ),
+            ],
+          )
+      ),
+    );
   }
 
 
@@ -186,65 +298,25 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
     ]);
   }
 
-
-  Widget _transfereeName(BuildContext context) {
-    return CustomTextFormField(
-      controller: transfereeController,
-      hintText: "Transferee Name",
-      textInputType: TextInputType.text,
-      autofocus: false,
-      focusNode: transfereeFocusNode,
-      validator:(value){
-        if(value!.isEmpty ){
-          return "Please provide transferee name" ;
-        }
-      },
-    );
-  }
-
   /// Section Widget
-  Widget _buildAddressField(BuildContext context) {
-    return CustomTextFormField(
-      controller: addressController,
-      hintText: "Physical Address",
-      textInputType: TextInputType.text,
-      autofocus: false,
-      focusNode: addressNode,
-      validator:(value){
-        if(value!.isEmpty ){
-          return "Please provide address" ;
-        }
-      },
-    );
-  }
+
+
+  
+
 
 
   /// Section Widget
-  Widget _contactDetails(BuildContext context) {
+  Widget _ReceiverField(BuildContext context) {
     return CustomTextFormField(
-      controller: contactDetailsController, hintText: "Contact Details",
-      focusNode: contactDetailsFocusNode,
-      autofocus: false,
-      validator:(value){
-        if(value!.isEmpty || double.tryParse(value) == null){
-          return "Provide a valid amount" ;
-        }
-      },
-    );
-  }
-
-  /// Section Widget
-  Widget _AreaField(BuildContext context) {
-    return CustomTextFormField(
-      controller: areaController,
-      hintText: "Area in sqm",
+      controller: receiverController,
+      hintText: "Enter Receiver ID",
       textInputAction: TextInputAction.done,
       textInputType: TextInputType.number,
       focusNode: areaFocusNode,
       autofocus: false,
-      validator:(value){
-        if(value!.isEmpty || double.tryParse(value) == null){
-          return "Provide a valid area" ;
+      validator: (value) {
+        if (value!.isEmpty || double.tryParse(value) == null) {
+          return "Provide receiver ID";
         }
       },
     );
@@ -253,18 +325,20 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
   /// Section Widget
   Widget _buildNext(BuildContext context) {
     return CustomElevatedButton(
-        text: "Claim mine",
+        text: "Transfer Mine",
         onPressed: () async {
           // onTapNext(context);
           // addNewMine(context);
           // addNewMine(context);
           if (validateInputs()) {
-            bool confirmation =  await showActionDialog("Add Mine", Colors.black54, "Are you sure you want to add a mine", context) ;
-            if(confirmation){
-              // addNewMine(context);
+            bool confirmation = await showActionDialog("Add Mine",
+                Colors.black54, "Are you sure you want to add a mine", context);
+            if (confirmation) {
+              await transferMine(context);
               // showInformativeDialog("Mine Added", Colors.black54, "Mine added sucessfully. Please wait for the review from the ministry of mines", context);
-            }else{
-              showInformativeDialog("Mine Not Added", Colors.black54, "Mine not added sucessfully. Please try again", context);
+            } else {
+              showInformativeDialog("Mine Not Added", Colors.black54,
+                  "Mine not added sucessfully. Please try again", context);
             }
           }
           // bool confirmation =  await showActionDialog("Add Mine", Colors.black54, "Are you sure you want to add a mine", context) ;
@@ -285,91 +359,7 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
         child: _buildNext(context));
   }
 
-  Widget _selectLocation(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        onTapSelectLocation(context);
-      },
-      child: Container(
-        width: 400.h,
-        height: 52.v,
-        padding: EdgeInsets.only(
-          top: 16.v,
-          left: 16.h,
-        ),
-        decoration: BoxDecoration(
-          color: appTheme.gray300,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                child:Text(
-                  "GPS Coordinates (optional)",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    // fontSize: 16,
-                    // fontWeight: FontWeight.bold,
-                    color: Colors.black54,
-                  ),
-                )
-            ),
-            SizedBox(
 
-            ),
-
-          ],
-        ),
-      ),
-    );
-  }
-  Widget _addFile(BuildContext context){
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
-            onTap: _pickFile,
-            child: Container(
-              // width: 400.h,
-              height: 150,
-              decoration: BoxDecoration(
-                color: appTheme.gray300,
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Icon(
-                          Icons.file_copy,
-                          color: Colors.black54,
-                        ),
-                      ),
-                      SizedBox(
-
-                      ),
-                      Text(
-                        _selectedFile == null ? 'Upload Prospectus Licence' : _selectedFile!.path,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ],
-                  )
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   /// Navigates back to the previous screen.
   onTapArrowLeft(BuildContext context) {
@@ -389,22 +379,39 @@ class _ClaimMineDetailsState extends State<ClaimMineDetails> {
       pageTransitionAnimation: PageTransitionAnimation.cupertino,
     );
   }
-  // addNewMine(BuildContext context) async {
-  //   showProcessingDialog(context);
-  //   FirebaseDB firebaseDB = FirebaseDB();
-  //   print("Mine Location ====================================== ${addressController.text}");
-  //   await firebaseDB.addMine(
-  //       context,
-  //       addressController.text,
-  //       areaController.text,
-  //       contactDetailsController.text,
-  //       gpsLatitude,
-  //       gpsLongitude,
-  //       "none",
-  //   );
-    // dismissDialog(context);
-  // }
-  validateTextFields(){
 
+  addNewMine(BuildContext context) async {
+    showProcessingDialog(context);
+    FirebaseDB firebaseDB = FirebaseDB();
+    print(
+        "Mine Location ====================================== ${addressController.text}");
+    await firebaseDB.addMine(
+      context,
+      addressController.text,
+      receiverController.text,
+      gpsLatitude,
+      gpsLongitude,
+      claimantController.text,
+      fileUrl,
+    );
+    // dismissDialog(context);
   }
+
+  transferMine(BuildContext context) async {
+    showProcessingDialog(context);
+    FirebaseDB firebaseDB = FirebaseDB();
+    print(
+        "Mine Location ====================================== ${addressController.text}");
+    await firebaseDB.transferMine(
+      context,
+      widget.mine.mineId,
+      receiverController.text
+
+    );
+
+
+    // dismissDialog(context);
+  }
+
+  validateTextFields() {}
 }

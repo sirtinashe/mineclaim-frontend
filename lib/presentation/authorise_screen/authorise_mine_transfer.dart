@@ -1,33 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:mineclaim/core/app_export.dart';
+import 'package:mineclaim/globals.dart';
+import 'package:mineclaim/models/transfer_request.dart';
 import 'package:mineclaim/presentation/authorise_screen/widgets/addnewpropertydetails_item_widget.dart';
 import 'package:mineclaim/widgets/custom_elevated_button.dart';
 import 'package:mineclaim/widgets/custom_icon_button.dart';
 import 'package:mineclaim/widgets/custom_outlined_button.dart';
 import 'package:mineclaim/widgets/dialogs.dart';
 
+import '../../apis/api_calls.dart';
 import '../../apis/firebase_db.dart';
+import '../../models/mine.dart';
 import '../../models/requests.dart';
 import '../../widgets/app_bar/appbar_subtitle_two.dart';
 import '../../widgets/app_bar/custom_app_bar.dart';
 
-class AuthoriseScreen extends StatelessWidget {
-  AuthoriseScreen({Key? key, required this.requestData}) : super(key: key);
+class AuthoriseMineTransferScreen extends StatefulWidget {
+  AuthoriseMineTransferScreen({Key? key, required this.requestData, required this.mineData}) : super(key: key);
 
-  final Requests requestData ;
+  final TransferRequests requestData ;
+  final Mine mineData ;
+
+  @override
+  State<AuthoriseMineTransferScreen> createState() => _AuthoriseMineTransferScreenState();
+}
+
+class _AuthoriseMineTransferScreenState extends State<AuthoriseMineTransferScreen> {
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // var mineData =  MineclaimApi(context).getMineById(widget.requestData.mineId, widget.requestData.transferredBy);
+    // mine =  mineData['data'];
+
+  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE7EEFA),
+        backgroundColor: Color(0xFFE7EEFA),
         appBar: AppBar(
           elevation: 2,
           foregroundColor: Colors.white,
           centerTitle: true,
           backgroundColor: PrimaryColors().appDarkBlue,
           title: Text(
-            requestData.requestType,
+            widget.requestData.requestType,
             style: TextStyle(
               color: Colors.white,
             ),
@@ -47,32 +69,32 @@ class AuthoriseScreen extends StatelessWidget {
                         Container(
 
                           child: ListTile(
-                            
-                            
+
+
                             // contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
                             dense:true,
                             visualDensity: VisualDensity(
                               vertical: -4,
-                          
+
                             ),
-                            iconColor: requestData.requestStatus != "Declined" ? Colors.green : Colors.red,
+                            iconColor: widget.requestData.requestStatus != "Declined" ? Colors.green : Colors.red,
                             tileColor: Colors.grey.withOpacity(0.2),
                             leading: Icon(Icons.info),
-                            title:  Text("${requestData.requestType}",
+                            title:  Text("${widget.requestData.requestType}",
                               style: TextStyle(
                                 color: Colors.black54,
                                 // fontWeight: FontWeight.w700
                               ),
                             ),
                             subtitle: Text(
-                              requestData.requestStatus,
+                              widget.requestData.requestStatus,
                               style: TextStyle(
-                                  color: Colors.black54,
-                                  // fontWeight: FontWeight.w700
+                                color: Colors.black54,
+                                // fontWeight: FontWeight.w700
                               ),
                             ),
                             style: ListTileStyle.drawer,
-                          
+
                           ),
                         ),
 
@@ -81,13 +103,13 @@ class AuthoriseScreen extends StatelessWidget {
                         SizedBox(height: 13.v),
                         Padding(
                           padding:  EdgeInsets.only(
-                            left: 10.h,
-                            bottom: 10.h
+                              left: 10.h,
+                              bottom: 10.h
                           ),
-                          child: Text("Requester Details",
+                          child: Text("Request Details",
                             style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.w700
+                                color: Colors.black54,
+                                fontWeight: FontWeight.w700
                             ),
                           ),
                         ),
@@ -125,7 +147,7 @@ class AuthoriseScreen extends StatelessWidget {
                   )
               )
             ])),
-        bottomNavigationBar: requestData.requestStatus =="Pending" ?_buildBTN(context): null
+        bottomNavigationBar: widget.requestData.requestStatus =="Pending" ?_buildBTN(context): null
     );
   }
 
@@ -154,7 +176,7 @@ class AuthoriseScreen extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20.0), // Should match the above radius
           child: Image.network(
-            requestData.imagePath,
+            widget.mineData.documentUrl,
             // width: 100.0,
             // height: 100.0,
             fit: BoxFit.cover,
@@ -166,10 +188,10 @@ class AuthoriseScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildMightyCincoFamily(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.h),
-        child:Card(
-          // elevation: 2.0,
-          // borderRadius: BorderRadius.circular(10.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.h),
+      child:Card(
+        // elevation: 2.0,
+        // borderRadius: BorderRadius.circular(10.0),
 
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -183,11 +205,11 @@ class AuthoriseScreen extends StatelessWidget {
                 // textColor: Colors.black54,
                 tileColor: Colors.white54,
                 leading: const Icon(
-                  Icons.wallet,
+                  Icons.person,
                   color: Colors.black54,
                 ),
                 title: const Text(
-                  'Requester ID',
+                  'Mine Owner',
                   // textScaleFactor: 1.5,
                   style: TextStyle(
                     color: Colors.black54,
@@ -195,7 +217,7 @@ class AuthoriseScreen extends StatelessWidget {
                 ),
                 // trailing: const Icon(Icons.req),
                 subtitle:  Text(
-                    requestData.requester,
+                    widget.mineData.mineOwner,
                     style: TextStyle(
                       color: Colors.black54,
                     )
@@ -211,8 +233,8 @@ class AuthoriseScreen extends StatelessWidget {
 
               Padding(
                 padding: EdgeInsets.only(
-                    left: 4.h,
-                    right: 4.h,
+                  left: 4.h,
+                  right: 4.h,
                 ),
                 child: Column(
                   children: [
@@ -227,7 +249,7 @@ class AuthoriseScreen extends StatelessWidget {
                         color: Colors.black54,
                       ),
                       title: const Text(
-                        'Requester Name',
+                        'New owner: ',
                         // textScaleFactor: 1.5,
                         style: TextStyle(
                           color: Colors.black54,
@@ -235,7 +257,7 @@ class AuthoriseScreen extends StatelessWidget {
                       ),
                       // trailing: const Icon(Icons.req),
                       subtitle: Text(
-                          requestData.data['requesterName'],
+                          widget.requestData.newMineOwner,
                           style: TextStyle(
                             color: Colors.black54,
                           )
@@ -250,7 +272,7 @@ class AuthoriseScreen extends StatelessWidget {
               )
             ],
           )
-        ),
+      ),
     );
   }
 
@@ -289,7 +311,7 @@ class AuthoriseScreen extends StatelessWidget {
                 ),
                 // trailing: const Icon(Icons.req),
                 subtitle: Text(
-                    requestData.data['mineId'],
+                    widget.requestData.mineId,
                     style: TextStyle(
                       color: Colors.black54,
                     )
@@ -323,7 +345,7 @@ class AuthoriseScreen extends StatelessWidget {
                   ),
                   // trailing: const Icon(Icons.req),
                   subtitle: Text(
-                      requestData.data['mineLocation'],
+                      widget.mineData.mineLocation,
                       style: TextStyle(
                         color: Colors.black54,
                       )
@@ -346,7 +368,7 @@ class AuthoriseScreen extends StatelessWidget {
                   // textColor: Colors.black54,
                   tileColor: Colors.white54,
                   leading: const Icon(
-                    Icons.location_on_rounded,
+                    Icons.area_chart,
                     color: Colors.black54,
                   ),
                   title: const Text(
@@ -358,7 +380,7 @@ class AuthoriseScreen extends StatelessWidget {
                   ),
                   // trailing: const Icon(Icons.req),
                   subtitle: Text(
-                      requestData.data['area'],
+                      widget.mineData.area,
                       style: TextStyle(
                         color: Colors.black54,
                       )
@@ -374,7 +396,6 @@ class AuthoriseScreen extends StatelessWidget {
       ),
     );
   }
-
 
   /// Section Widget
   Widget _buildContactAgent(BuildContext context) {
@@ -408,14 +429,12 @@ class AuthoriseScreen extends StatelessWidget {
         SizedBox(width: 10,),
         ElevatedButton(
           onPressed: () async {
-            bool approve = await showActionDialog(requestData.requestType, Colors.black54, "Are you sure you want to approve ${requestData.requestType}", context);
+            bool approve = await showActionDialog(widget.requestData.requestType, Colors.black54, "Are you sure you want to approve ${widget.requestData.requestType}", context);
             // Button action goes here
             if(approve){
-              FirebaseDB firebaseDB = FirebaseDB();
-              print("Mine ID: ${requestData.data['mineId']}");
-              showProcessingDialog(context);
-              bool updated = await firebaseDB.verifyMine(context, requestData.data['mineId'] );
-
+              _verifyMineTransfer();
+            }else{
+              await dismissDialog(context);
             }
           },
           style: ElevatedButton.styleFrom(
@@ -447,7 +466,16 @@ class AuthoriseScreen extends StatelessWidget {
         child: _buildContactAgent(context));
   }
 
-  /// Common widget
+  _verifyMineTransfer() async {
+
+    FirebaseDB firebaseDB = FirebaseDB();
+    // print("Mine ID: ${widget.requestData.data['mineId']}");
+    showProcessingDialog(context);
+    // bool updated = await firebaseDB.transferMine(context, widget.requestData.mineId, widget.requestData.newMineOwner);
+    await firebaseDB.verifyMineTransfer(context, widget.requestData.mineId);
+
+
+  }
 
 
   /// Navigates back to the previous screen.
