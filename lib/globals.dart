@@ -80,6 +80,7 @@ List<Requests> requestData = [
 ];
 
 String globalUuid = "" ;
+String globalEmail = "" ;
 // FirebaseFirestore db ;
 // final Future<SharedPreferences> sharedPreferences =  SharedPreferences.getInstance() ;
 

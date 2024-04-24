@@ -116,8 +116,14 @@ class MineclaimApi {
       client.close();
     }
   }
+ Future transferMine(Map<String, dynamic> payload) async{
+    String apiUrl = "http://10.2.2:5000/transferMine";
+    String method = "POST";
 
-  // Future add mine
+    return await httpsRequest(jsonEncode(payload), apiUrl, method);
+
+ }
+
   Future addMine(Map<String, dynamic> payload) async {
     String apiUrl = "http://10.0.2.2:5000/mineByOwner";
     String method = "POST";
@@ -153,5 +159,31 @@ class MineclaimApi {
     }
 
     return minesJson;
+  }
+
+  getMineById(String mineId, String mineOwner) async{
+    showProcessingDialog(context);
+    String apiUrl = "http://10.0.2.2:5000/getMine" ;
+    String method  =  "POST";
+    var payload = {
+      "mineId": mineId,
+      "ownerId":  mineOwner
+    };
+    final mineJson =  await httpsRequest(jsonEncode(payload), apiUrl, method);
+    if (mineJson['success']){
+      Mine mine =  Mine.fromJson(mineJson['data']);
+      await dismissDialog(context);
+
+      return {
+        "success": true,
+        "data": mine,
+        "message": "Mine retrieved"
+      };
+    }
+
+    await dismissDialog(context);
+
+    return mineJson ;
+
   }
 }

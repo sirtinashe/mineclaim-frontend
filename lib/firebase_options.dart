@@ -17,14 +17,13 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
-    }
+      return web;
+     }
+
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
+
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -63,8 +62,19 @@ class DefaultFirebaseOptions {
     messagingSenderId: '378520027757',
     projectId: 'intellixbot-jqcj',
     storageBucket: 'intellixbot-jqcj.appspot.com',
-    androidClientId: '378520027757-puijge4rf8asa3lru8a9m4a00llt1nv3.apps.googleusercontent.com',
+    androidClientId: '378520027757-14ekm1ramsg1e4qtqeb0jpk34becikk6.apps.googleusercontent.com',
     iosClientId: '378520027757-nqq213opkuktrensknbfaai76jjcpgee.apps.googleusercontent.com',
     iosBundleId: 'com.mineclaim.app',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDAMCoUx9Vs17GktRZog64s4zNKu7vMlcA',
+    appId: '1:378520027757:web:899f6e2417d13ec78a7564',
+    messagingSenderId: '378520027757',
+    projectId: 'intellixbot-jqcj',
+    authDomain: 'intellixbot-jqcj.firebaseapp.com',
+    storageBucket: 'intellixbot-jqcj.appspot.com',
+    measurementId: 'G-661GQ4WVRN',
+  );
+
 }

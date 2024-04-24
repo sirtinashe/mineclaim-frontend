@@ -45,6 +45,7 @@ Future<void> main() async {
       String? uuid  =  sharedPreferences.getString("uuid");
       print("Email $email , uuid $uuid");
       globalUuid = uuid.toString();
+      globalEmail = email.toString();
 
 
       print("============== End of the shared preferences ============");

@@ -58,6 +58,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "378520027757-14ekm1ramsg1e4qtqeb0jpk34becikk6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mineclaim.app",
+            "certificate_hash": "907699d0b30aa171c57ff75ab0a7a31578ba7b34"
+          }
+        },
+        {
           "client_id": "378520027757-eccmmvn59p8jmi49vf24747cu8tq6j9v.apps.googleusercontent.com",
           "client_type": 3
         }
