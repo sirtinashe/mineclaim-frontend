@@ -311,16 +311,17 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
       controller: receiverController,
       hintText: "Enter Receiver ID",
       textInputAction: TextInputAction.done,
-      textInputType: TextInputType.number,
+      textInputType: TextInputType.text,
       focusNode: areaFocusNode,
       autofocus: false,
       validator: (value) {
-        if (value!.isEmpty || double.tryParse(value) == null) {
+        if (value!.isEmpty ) {
           return "Provide receiver ID";
         }
       },
     );
   }
+
 
   /// Section Widget
   Widget _buildNext(BuildContext context) {
@@ -402,6 +403,7 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
     FirebaseDB firebaseDB = FirebaseDB();
     print(
         "Mine Location ====================================== ${addressController.text}");
+
     await firebaseDB.transferMine(
       context,
       widget.mine.mineId,

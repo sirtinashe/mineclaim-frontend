@@ -50,12 +50,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: CustomImageView(
                             imagePath: ImageConstant.imgTelevisionGray50))
                   ])),
-              SizedBox(height: 8.v),
-              Text("Mbini Muleya",
-                  style: CustomTextStyles.titleMediumBold_1),
+
               SizedBox(height: 4.v),
               Text(
-                  "hello@gmail.com",
+                  globalEmail,
                   style: CustomTextStyles.titleSmallBluegray500Medium),
               SizedBox(height: 31.v),
               Align(
@@ -70,33 +68,11 @@ class _ProfilePageState extends State<ProfilePage> {
               }, icon: Icons.wallet, data: globalUuid, show_edit_icon: false
               ),
               // _buildFullName(context),
-              SizedBox(height: 16.v),
-              // Divider(),
 
-              _buildMyFavorites(context, text: "Number of Listings owned",
-                  onTapMyFavorites: () {
-                onTapMyFavorites2(context);
-              }, icon: Icons.numbers_outlined, data: '12', show_edit_icon: false
-              ),
               // SizedBox(height: 16.v),
               // Divider(height: 20,),
               SizedBox(height: 16.v),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text("General",
-                      style: CustomTextStyles.titleSmallBluegray500)
-              ),
-              Divider(height: 20,),
-              // SizedBox(height: 16.v),
-              _buildMyFavorites(context, text: "Email", icon: Icons.email, data: 'tinashemashay@gmail.com', show_edit_icon: true
-              ),
-              SizedBox(height: 16.v),
-              _buildMyFavorites(context, text: "User name", icon: Icons.person,
-                  onTapMyFavorites: () {
-                onTapMyFavorites3(context);
-                }, data: 'Mbini Muleya', show_edit_icon: true
-              ),
-              // 0000400129339
+
 
               SizedBox(height: 5.v)
             ])));

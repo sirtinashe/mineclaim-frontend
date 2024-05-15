@@ -5,7 +5,7 @@ class Mine {
   String gpsLatitude;
   String gpsLongitude;
   String timeAdded;
-  bool verified ;
+  String verified ;
   String mineOwner;
   String requestType;
   String requestStatus;
@@ -38,7 +38,7 @@ class Mine {
       gpsLatitude: json['gpsLatitude'].toString(),
       gpsLongitude: json['gpsLongitude'].toString(),
       timeAdded: json['timeAdded'].toString(),
-      verified: json['verified'] == "True" ? true : false ,
+      verified: json['verified'],
       mineOwner: json['mineOwner'].toString(),
       requestType: json['requestType'].toString(),
       requestStatus: json['requestStatus'].toString(),

@@ -8,6 +8,8 @@ import 'package:mineclaim/models/mine.dart';
 import 'package:mineclaim/widgets/dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:path/path.dart' as path;
+
 class FirebaseDB{
   FirebaseFirestore db = FirebaseFirestore.instance;
   final Future<SharedPreferences> _sharedPreferences =  SharedPreferences.getInstance() ;
@@ -99,11 +101,11 @@ class FirebaseDB{
     // showProcessingDialog(context);
     var data = {
       'newMineOwner': newOwner,
-      'requestStatus': 'Pending',
+      'requestStatus': 'Verified',
       'mineId': mineId,
       'requestType': 'TRANSFER_MINE',
       'transferredBy': uuid.toString(),
-      'verified': false
+      'verified': true
 
     };
 
@@ -159,7 +161,7 @@ class FirebaseDB{
         .collection('mines')
         .doc(mineId)
         .update({
-      'verified': true,
+      'verified': "Verified",
       'requestStatus': 'Verified',
 
       'verifiedBy': uuid.toString()
@@ -187,7 +189,7 @@ class FirebaseDB{
         .doc(mine.mineId)
         .set(mineData)
         .then((value) {
-      dismissDialog(context);
+      // dismissDialog(context);
       showInformativeDialog("Success", Colors.green, "Mine successfully claimed", context);
       return true;
     }
@@ -218,7 +220,7 @@ class FirebaseDB{
         gpsLatitude: gpsLatitude,
         gpsLongitude: gpsLongitude,
         timeAdded: mineId,
-        verified: false,
+        verified: "Not Verified",
         mineOwner: uuid.toString(),
         requestType: 'VERIFY_MINE',
         requestStatus: 'Pending',
@@ -250,10 +252,13 @@ class FirebaseDB{
 
   Future<Map<String,dynamic>> uploadFile(File file) async {
     try {
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      // String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       print('File name: ${file.path}');
+      String fileName = path.basename(file.path);
+      print('File name: $fileName');
+
       // Directory appDocDir = await getApplicationDocumentsDirectory();
-      Reference reference = storageRef.ref().child('demo.png');
+      Reference reference = storageRef.ref().child(fileName);
       await reference.putFile(file);
 
       return {

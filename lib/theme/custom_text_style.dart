@@ -141,7 +141,7 @@ class CustomTextStyles {
       );
   static get titleMediumBold_1 => theme.textTheme.titleMedium!.copyWith(
         fontWeight: FontWeight.w700,
-        color: Colors.white
+        color: Colors.black54,
       );
   static get titleMediumBold_2 => theme.textTheme.titleMedium!.copyWith(
         fontWeight: FontWeight.w700,

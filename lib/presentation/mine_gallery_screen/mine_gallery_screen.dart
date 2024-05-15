@@ -74,16 +74,6 @@ class _MineGalleryState extends State<MineGallery> {
           text: "Mine Gallery"
       ),
       actions: [
-
-        // Container(
-        //     child: IconButton(
-        //       icon: Icon(
-        //         Icons.search,
-        //         color: Colors.black54,
-        //       ),
-        //       onPressed: (){},
-        //     )
-        // ),
         Container(
             child: IconButton(
               icon: Icon(
@@ -138,20 +128,9 @@ class _MineGalleryState extends State<MineGallery> {
                 );
               } else {
                 print(snapshot.data);
-                // final documents = snapshot.data as QuerySnapshot;
-                // List<DocumentSnapshot> documents = snapshot.data!.docs;
-                // List<Mine> mines = snapshot.data!.docs.map((doc) => Mine.fromJson(doc.data())).toList();
+
 
                 List<Mine> mines = snapshot.data!.docs.map((doc) => Mine.fromJson(doc.data() as Map<String, dynamic>)).toList();
-                // if(!snapshot.data!['success']){
-                //   minesAvailable = false;
-                //   return EmptyMinesScreen();
-                //
-                // }
-                // List<Mine> mines= snapshot.data!['data'] ?? [];
-
-
-                // message = snapshot.data!['message'];
                 if (mines.length == 0) {
                   minesAvailable = false;
                   // setState(() {
@@ -288,7 +267,7 @@ class _MineGalleryState extends State<MineGallery> {
                 ),
                 Padding(
                     padding: EdgeInsets.only(left: 4.h),
-                    child: Text(mine.verified ? "Verified" : "Not Verified",
+                    child: Text(mine.verified ,
                         style: theme.textTheme.titleMedium?.copyWith(
                             color: Colors.green,
                             fontSize: 12

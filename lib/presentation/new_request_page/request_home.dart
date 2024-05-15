@@ -72,28 +72,6 @@ class _RequestHomeScreenState extends State<RequestHomeScreen> {
             )
 
         ),
-    //   floatingActionButton: FloatingActionButton.extended(
-    //     heroTag: "btn1",
-    // backgroundColor: Colors.white,
-    //   foregroundColor: Colors.blue,
-    //   onPressed: () {
-    //     // Respond to button press
-    //     PersistentNavBarNavigator.pushNewScreen(
-    //       context,
-    //       screen: NewRequestPage(),
-    //       withNavBar: false, // OPTIONAL VALUE. True by default.
-    //       pageTransitionAnimation: PageTransitionAnimation.cupertino,
-    //     );
-    //   },
-    //   icon: Icon(Icons.create),
-    //   label: Text(
-    //     'Create a request',
-    //     style: TextStyle(
-    //         // fontWeight: FontWeight.w700,
-    //         // fontSize: 16
-    //     ),
-    //   ),
-    // )
     );
   }
 
@@ -110,25 +88,6 @@ class _RequestHomeScreenState extends State<RequestHomeScreen> {
 
   /// Section Widget
   Widget _buildPropertyList(BuildContext context) {
-    // return Container(
-    //   child: ListView.builder(
-    //       physics: NeverScrollableScrollPhysics(),
-    //       shrinkWrap: true,
-    //
-    //       itemCount: requestData.length,
-    //
-    //       itemBuilder: (context, index) {
-    //         return Card(
-    //           child: Padding(
-    //             padding: EdgeInsets.only(bottom: 10.0.v),
-    //             child: RequestWidget(
-    //               requestData: requestData[index],
-    //
-    //             ),
-    //           ),
-    //         );
-    //       }),
-    // );
      return Container(
        child: StreamBuilder<QuerySnapshot>(
        stream: stream,

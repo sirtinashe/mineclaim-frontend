@@ -67,7 +67,7 @@ class _MineclaimHomeState extends State<MineclaimHome> {
       // MineGallery(),
       OwnedMines(),
       RequestHomeScreen(),
-      MineTransferRequest(),
+      // MineTransferRequest(),
       NotificationScreen(),
       SettingsScreen(),
 
@@ -135,12 +135,12 @@ class _MineclaimHomeState extends State<MineclaimHome> {
         activeColorPrimary: Color(0xFF152A47),
         inactiveColorPrimary: Color(0xFF152A47),
       ),
-      PersistentBottomNavBarItem(
-        icon: Image.asset("assets/app_icons/code-pull-request.png"),
-        // title: ("Market Place"),
-        activeColorPrimary: Color(0xFF152A47),
-        inactiveColorPrimary: Color(0xFF152A47),
-      ),
+      // PersistentBottomNavBarItem(
+      //   icon: Image.asset("assets/app_icons/code-pull-request.png"),
+      //   // title: ("Market Place"),
+      //   activeColorPrimary: Color(0xFF152A47),
+      //   inactiveColorPrimary: Color(0xFF152A47),
+      // ),
       PersistentBottomNavBarItem(
         // icon: Icon(Icons.notifications),
         icon: Image.asset("assets/app_icons/notificationf.png"),

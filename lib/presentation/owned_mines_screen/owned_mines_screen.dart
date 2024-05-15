@@ -39,49 +39,6 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
     tabviewController = TabController(length: 2, vsync: this);
   }
 
-  Widget _buildTabview(BuildContext context) {
-    return Container(
-        height: 30.v,
-        width: 380.h,
-        color: Color(0xFFE7EEFA),
-        child: TabBar(
-            controller: tabviewController,
-            // padding: EdgeInsets.only(bottom: 10.v),
-            labelPadding: EdgeInsets.zero,
-            // labelColor: appTheme.whitesmallheadline,
-            labelColor: Colors.blue,
-            labelStyle: TextStyle(
-                fontSize: 16.fSize,
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.w600),
-            unselectedLabelColor: theme.colorScheme.primary,
-            unselectedLabelStyle: TextStyle(
-                fontSize: 16.fSize,
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.w600),
-            // indicator: BoxDecoration(
-            //     color: theme.colorScheme.primary,
-            //     borderRadius: BorderRadius.circular(10.h)),
-            tabs: [
-              Tab(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                    child: Text("Market Place"),
-
-                  )
-              ),
-              Tab(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                    child: Text("My Mines"),
-
-                  )
-              ),
-
-            ]
-        )
-    );
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,21 +54,6 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
             ),
           ),
 actions: [
-            // IconButton(
-            //   icon: Icon(
-            //     Icons.add,
-            //     color: Colors.white,
-            //   ),
-            //   onPressed: () {
-            //     PersistentNavBarNavigator.pushNewScreen(
-            //       context,
-            //       screen: AddNewMineScreen(),
-            //       withNavBar: false, // OPTIONAL VALUE. True by default.
-            //       pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            //     );
-            //
-            //   },
-            // ),
             PopupMenuButton(
               itemBuilder: (ctx) => [
                 _buildPopupMenuItem('Coming Soon'),
@@ -125,45 +67,7 @@ actions: [
         ),
         body: MineGallery(),
 
-        // body: SizedBox(
-        //     width: double.maxFinite,
-        //     child: Column(
-        //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //         children: [
-        //       Container(
-        //           color: Color(0xFFE7EEFA),
-        //           height: 15.v,
-        //           // child: SizedBox(height: 15.v)
-        //       ),
-        //       _buildTabview(context),
-        //       // Container(
-        //       //   height: 10.v,
-        //       //   color: Color(0xFFE7EEFA),
-        //       // ),
-        //       tabView(context)
-        //     ]
-        //     )
-        // ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-        // floatingActionButton: FloatingActionButton(
-        //   heroTag: "btn1",
-        //   // isExtended: true,
-        //   child: Icon(Icons.add),
-        //   backgroundColor: Colors.white,
-        //   onPressed: () {
-        //     PersistentNavBarNavigator.pushNewScreen(
-        //       context,
-        //       screen: AddNewMineScreen(),
-        //       withNavBar: false, // OPTIONAL VALUE. True by default.
-        //       pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        //     );
-        //     // setState(() {
-        //     //
-        //     // });
-        //     // Navigator.pushNamed(context, AppRoutes.addNewPropertyAddressScreen);
-        //   },
-        // ),
         floatingActionButton: SpeedDial(
           backgroundColor: Colors.white,
           icon: Icons.add,
@@ -188,7 +92,7 @@ actions: [
                     if(mine.mineOwner == globalUuid){
                       firebaseDB.addClaimedMines(context, mine);
                     }else{
-                      dismissDialog(context);
+                      // dismissDialog(context);
                       // check to see if the mine exist in firebase
                       bool isMineExist = await firebaseDB.checkMineExistence(mineId);
                       showInformativeDialog("Mine Information", Colors.black45, "You are not the owner of this mine , mine belongs to ${mine.mineOwner}", context);

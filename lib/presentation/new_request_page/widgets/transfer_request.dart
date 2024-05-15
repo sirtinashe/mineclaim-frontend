@@ -36,15 +36,6 @@ class TransferRequestWidget extends StatelessWidget {
 
         child: Row(
           children: [
-            // CustomImageView(
-            //   imagePath: requestData.imagePath,
-            //   height: 109.v,
-            //   width: 102.h,
-            //   radius: BorderRadius.horizontal(
-            //     left: Radius.circular(10.h),
-            //   ),
-            //   fit: BoxFit.cover,
-            // ),
             Padding(
               padding: EdgeInsets.only(
                 left: 16.h,
