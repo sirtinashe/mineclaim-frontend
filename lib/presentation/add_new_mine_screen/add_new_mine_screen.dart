@@ -12,6 +12,8 @@ import 'package:mineclaim/widgets/custom_elevated_button.dart';
 import 'package:mineclaim/widgets/custom_text_form_field.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+import '../../apis/api_calls.dart';
+import '../../models/mine.dart';
 import '../../widgets/dialogs.dart';
 import '../location_screens/location_picker_screen.dart';
 import 'package:mineclaim/apis/firebase_db.dart';
@@ -29,6 +31,7 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
 
   TextEditingController gpsGPSLongitudeController = TextEditingController();
   TextEditingController claimantController = TextEditingController();
+  TextEditingController ownerWalletController = TextEditingController();
 
   TextEditingController priceController = TextEditingController();
   final FocusNode addressFocusNode = FocusNode();
@@ -37,6 +40,7 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
   final FocusNode priceFocusNode = FocusNode();
   final FocusNode areaFocusNode = FocusNode();
   final FocusNode claimantNode = FocusNode();
+  final FocusNode ownerWalletNode = FocusNode();
 
   String gpsLatitude = "none";
   String gpsLongitude = "none";
@@ -144,6 +148,8 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
                               // _buildMineLocation(context),
                               _buildClaimant(context),
                               SizedBox(height: 13.v),
+                              _buildOwnerAddress(context),
+                              SizedBox(height: 13.v),
 
                               _buildAddressField(context),
                               SizedBox(height: 12.v),
@@ -190,6 +196,21 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
       validator: (value) {
         if (value!.isEmpty) {
           return "Please provide address";
+        }
+      },
+    );
+  }
+
+  Widget _buildOwnerAddress(BuildContext context) {
+    return CustomTextFormField(
+      controller: ownerWalletController,
+      hintText: "Wallet Address",
+      textInputType: TextInputType.text,
+      autofocus: false,
+      focusNode: ownerWalletNode,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "Please provide wallet address";
         }
       },
     );
@@ -254,7 +275,7 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
             bool confirmation = await showActionDialog("Add Mine",
                 Colors.black54, "Are you sure you want to add a mine", context);
             if (confirmation) {
-              addNewMine(context);
+              addNewMine22(context);
               // showInformativeDialog("Mine Added", Colors.black54, "Mine added sucessfully. Please wait for the review from the ministry of mines", context);
             } else {
               showInformativeDialog("Mine Not Added", Colors.black54,
@@ -508,9 +529,10 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
     );
   }
 
-  addNewMine(BuildContext context) async {
+  addNewMine1(BuildContext context) async {
     showProcessingDialog(context);
     FirebaseDB firebaseDB = FirebaseDB();
+
     print(
         "Mine Location ====================================== ${addressController.text}");
     await firebaseDB.addMine(
@@ -524,6 +546,23 @@ class _AddNewMineScreenState extends State<AddNewMineScreen> {
     );
     // dismissDialog(context);
   }
+  addNewMine22(BuildContext context) async {
+    showProcessingDialog(context);
+    print("============== Wallet Address ${ownerWalletController.text}");
+    Map results =await  MineclaimApi(context).addMine(
+        context,
+        addressController.text,
+        areaController.text,
+        gpsLatitude,
+        gpsLongitude,
+        claimantController.text,
+        fileUrl,
+        ownerWalletController.text
+    );
+    dismissDialog(context);
+    showInformativeDialog("Message", Colors.black45, results['message'], context);
+  }
+
 
   validateTextFields() {}
 }

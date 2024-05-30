@@ -16,20 +16,19 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../../apis/firebase_db.dart';
 import '../../models/mine.dart';
 import '../../widgets/dialogs.dart';
-import '../add_new_mine_screen/add_new_mine_screen.dart';
-
-import '../transfer_mine/transfer_mine_screen.dart';
+import '../presentation/add_new_mine_screen/add_new_mine_screen.dart';
+import '../presentation/transfer_mine/transfer_mine_screen.dart';
 
 
 // ignore_for_file: must_be_immutable
-class OwnedMines extends StatefulWidget {
-  OwnedMines({Key? key}) : super(key: key);
+class MyPersonalMines extends StatefulWidget {
+  MyPersonalMines({Key? key}) : super(key: key);
 
   @override
-  State<OwnedMines> createState() => _OwnedMinesState();
+  State<MyPersonalMines> createState() => _MyPersonalMinesState();
 }
 
-class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
+class _MyPersonalMinesState extends State<MyPersonalMines> with TickerProviderStateMixin{
   bool complete = false;
 
   // Column(children: [
@@ -39,7 +38,7 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
 
   Future<Map<String ,dynamic>>_getMines() async {
 
-    return await MineclaimApi(context).getAllMines();
+    return await MineclaimApi(context).getMines(globalUuid);
   }
 
   @override
@@ -58,7 +57,7 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
           centerTitle: true,
           backgroundColor: PrimaryColors().appDarkBlue,
           title: Text(
-            "All Mines",
+            "Owned Mines",
             style: TextStyle(
               color: Colors.white,
             ),
@@ -258,42 +257,40 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
                                               // ),
 
                                               SizedBox(height: 13.v),
-                                              Container(
-                                                child: mine.mineOwner == globalUuid ?ElevatedButton(
-                                                  onPressed: () async {
-                                                    // buildDialog(context);
+                                              ElevatedButton(
+                                                onPressed: () async {
+                                                  // buildDialog(context);
 
-                                                    // navigate to ConfirmRequestScreen
-                                                    PersistentNavBarNavigator.pushNewScreen(
-                                                      context,
-                                                      screen: TransferMineScreen(
-                                                        mine: mine,
-                                                      ),
-                                                      withNavBar: false, // OPTIONAL VALUE. True by default.
-                                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                                    );
-
-                                                    // Button action goes here
-                                                  },
-                                                  style: ElevatedButton.styleFrom(
-                                                    // backgroundColor: Colors.red,
-                                                    backgroundColor: Color(0xFF152A47),
-
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                                                  // navigate to ConfirmRequestScreen
+                                                  PersistentNavBarNavigator.pushNewScreen(
+                                                    context,
+                                                    screen: TransferMineScreen(
+                                                      mine: mine,
                                                     ),
-                                                    elevation: 4.0, // Adjust the elevation as needed
-                                                    padding: EdgeInsets.symmetric(
-                                                        horizontal: 40.0.v,
-                                                        vertical: 22.0.v
-                                                    ),
+                                                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                                  );
+
+                                                  // Button action goes here
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  // backgroundColor: Colors.red,
+                                                  backgroundColor: Color(0xFF152A47),
+
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
                                                   ),
-                                                  child: Text(
-                                                    "Transfer",
-                                                    style: TextStyle(fontSize: 20.0,color: Colors.white),
+                                                  elevation: 4.0, // Adjust the elevation as needed
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 40.0.v,
+                                                      vertical: 22.0.v
                                                   ),
-                                                ):Container(),
-                                              )
+                                                ),
+                                                child: Text(
+                                                  "Transfer",
+                                                  style: TextStyle(fontSize: 20.0,color: Colors.white),
+                                                ),
+                                              ),
                                             ]
                                         )
                                     )
@@ -339,7 +336,6 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
                     );
 
                   }
-
                 },
                 label:  "Add Mine"
             ),

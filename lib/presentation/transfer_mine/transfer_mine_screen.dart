@@ -12,6 +12,7 @@ import 'package:mineclaim/widgets/custom_elevated_button.dart';
 import 'package:mineclaim/widgets/custom_text_form_field.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+import '../../apis/api_calls.dart';
 import '../../models/mine.dart';
 import '../../widgets/dialogs.dart';
 import '../location_screens/location_picker_screen.dart';
@@ -28,7 +29,7 @@ class TransferMineScreen extends StatefulWidget {
 
 class _TransferMineScreenState extends State<TransferMineScreen> {
 
-
+  String receiverId = "";
   TextEditingController addressController = TextEditingController();
 
   TextEditingController gpsGPSLongitudeController = TextEditingController();
@@ -310,13 +311,18 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
     return CustomTextFormField(
       controller: receiverController,
       hintText: "Enter Receiver ID",
-      textInputAction: TextInputAction.done,
+      // textInputAction: TextInputAction.done,
       textInputType: TextInputType.text,
       focusNode: areaFocusNode,
       autofocus: false,
       validator: (value) {
         if (value!.isEmpty ) {
           return "Provide receiver ID";
+        }else{
+          print("Receiver ID is $value");
+          setState(() {
+            receiverId = value;
+          });
         }
       },
     );
@@ -332,14 +338,14 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
           // addNewMine(context);
           // addNewMine(context);
           if (validateInputs()) {
-            bool confirmation = await showActionDialog("Add Mine",
-                Colors.black54, "Are you sure you want to add a mine", context);
+            bool confirmation = await showActionDialog("Transfer Mine",
+                Colors.black54, "Are you sure you want to transfer mine!", context);
             if (confirmation) {
-              await transferMine(context);
+              await transferMine2(context);
               // showInformativeDialog("Mine Added", Colors.black54, "Mine added sucessfully. Please wait for the review from the ministry of mines", context);
             } else {
-              showInformativeDialog("Mine Not Added", Colors.black54,
-                  "Mine not added sucessfully. Please try again", context);
+              showInformativeDialog("Mine Not transferred", Colors.black54,
+                  "Mine not transferred", context);
             }
           }
           // bool confirmation =  await showActionDialog("Add Mine", Colors.black54, "Are you sure you want to add a mine", context) ;
@@ -398,21 +404,41 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
     // dismissDialog(context);
   }
 
-  transferMine(BuildContext context) async {
+  transferMine2(BuildContext context) async {
+    // showProcessingDialog(context);
+    // FirebaseDB firebaseDB = FirebaseDB();
+    print(
+        "Mine Location ====================================== ${receiverId}");
+
+
+    Map result = await MineclaimApi(context).transferMine(
+        widget.mine.mineId,
+        receiverId
+    );
+    // dismissDialog(context);
+    // xWN1lSnvWvOQ0Zkju2nOylvFBJR2
+
+    showInformativeDialog("Message", Colors.black45, result['message'], context);
+
+
+
+  }
+
+  transferMine22(BuildContext context) async {
     showProcessingDialog(context);
     FirebaseDB firebaseDB = FirebaseDB();
     print(
-        "Mine Location ====================================== ${addressController.text}");
+        "Mine Location ====================================== ${receiverController.text}");
 
     await firebaseDB.transferMine(
-      context,
-      widget.mine.mineId,
-      receiverController.text
+        context,
+        widget.mine.mineId,
+        receiverId
 
     );
 
 
-    // dismissDialog(context);
+    dismissDialog(context);
   }
 
   validateTextFields() {}

@@ -31,24 +31,24 @@ class MineGallery extends StatefulWidget {
 
 class _MineGalleryState extends State<MineGallery> {
   bool complete = false;
-  // late Future<Map<String,dynamic>> futureMines;
+  late Future<Map<String,dynamic>> futureMines;
 
   // Column(children: [
   bool minesAvailable = false ;
   String message = "No mines available";
-  Stream<QuerySnapshot>? stream;
+  // Stream<QuerySnapshot>? stream;
 
   Future<Map<String ,dynamic>>_getMines() async {
 
-    return await MineclaimApi(context).getMines(globalUuid);
+    return await MineclaimApi(context).getAllMines();
     }
   @override
   void initState() {
     super.initState();
-    // futureMines = _getMines();
-    stream = FirebaseFirestore.instance
-        .collection('claimed_by_$globalUuid')
-        .snapshots();
+    futureMines = _getMines();
+    // stream = FirebaseFirestore.instance
+    //     .collection('claimed_by_$globalUuid')
+    //     .snapshots();
 
 
   }
@@ -119,8 +119,8 @@ class _MineGalleryState extends State<MineGallery> {
             padding: EdgeInsets.symmetric(horizontal: 24.h),
             // child: Center(child: Text("Mines available",style: TextStyle(fontSize: 20.0,color: Colors.black),))
             // create child future builder to fetch mines
-            child: StreamBuilder<QuerySnapshot>(
-                stream: stream,
+            child: FutureBuilder<Map<String ,dynamic>>(
+                future: futureMines,
                 builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
@@ -128,14 +128,11 @@ class _MineGalleryState extends State<MineGallery> {
                 );
               } else {
                 print(snapshot.data);
+                List<Mine> mines = snapshot.data!['data'] ?? [];
 
 
-                List<Mine> mines = snapshot.data!.docs.map((doc) => Mine.fromJson(doc.data() as Map<String, dynamic>)).toList();
                 if (mines.length == 0) {
                   minesAvailable = false;
-                  // setState(() {
-                  //
-                  // });
                   return EmptyMinesScreen();
                 }
                 if (snapshot.hasError) {
@@ -298,17 +295,7 @@ class _MineGalleryState extends State<MineGallery> {
 
               ]),
 
-              // SizedBox(height: 13.v),
-              // Container(
-              //     width: 264.h,
-              //     margin: EdgeInsets.only(right: 30.h),
-              //     child: Text(
-              //         "This were is were any description will come.This were is were any description will come",
-              //         maxLines: 2,
-              //         overflow: TextOverflow.ellipsis,
-              //         style: CustomTextStyles.labelLargePrimaryContainer
-              //             .copyWith(height: 1.50))),
-              // SizedBox(height: 13.v),
+
               CustomImageView(
                 imagePath: mine.documentUrl,
                 height: 180.v,
@@ -321,40 +308,42 @@ class _MineGalleryState extends State<MineGallery> {
               // ),
 
               SizedBox(height: 13.v),
-              ElevatedButton(
-                onPressed: () async {
-                  // buildDialog(context);
+              Container(
+                child: mine.mineOwner == globalUuid ?ElevatedButton(
+                  onPressed: () async {
+                    // buildDialog(context);
 
-                  // navigate to ConfirmRequestScreen
-                  PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: TransferMineScreen(
-                      mine: mine,
+                    // navigate to ConfirmRequestScreen
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: TransferMineScreen(
+                        mine: mine,
+                      ),
+                      withNavBar: false, // OPTIONAL VALUE. True by default.
+                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    );
+
+                    // Button action goes here
+                  },
+                  style: ElevatedButton.styleFrom(
+                    // backgroundColor: Colors.red,
+                    backgroundColor: Color(0xFF152A47),
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
                     ),
-                    withNavBar: false, // OPTIONAL VALUE. True by default.
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
-
-                  // Button action goes here
-                },
-                style: ElevatedButton.styleFrom(
-                  // backgroundColor: Colors.red,
-                  backgroundColor: Color(0xFF152A47),
-
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                    elevation: 4.0, // Adjust the elevation as needed
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 40.0.v,
+                        vertical: 22.0.v
+                    ),
                   ),
-                  elevation: 4.0, // Adjust the elevation as needed
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 40.0.v,
-                      vertical: 22.0.v
+                  child: Text(
+                    "Transfer",
+                    style: TextStyle(fontSize: 20.0,color: Colors.white),
                   ),
-                ),
-                child: Text(
-                  "Transfer",
-                  style: TextStyle(fontSize: 20.0,color: Colors.white),
-                ),
-              ),
+                ):Container(),
+              )
             ]
         )
     );

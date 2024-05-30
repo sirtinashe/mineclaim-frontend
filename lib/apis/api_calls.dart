@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mineclaim/models/mine.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/dialogs.dart';
 
@@ -116,17 +117,48 @@ class MineclaimApi {
       client.close();
     }
   }
- Future transferMine(Map<String, dynamic> payload) async{
-    String apiUrl = "http://10.2.2:5000/transferMine";
+ Future transferMine( String mineId,String newOwner) async{
+    String apiUrl = "http://10.0.2.2:5000/transfer_ownership";
+
     String method = "POST";
+    var payload = {
+      "mineId": mineId,
+      "newOwnerId":newOwner
+    };
 
     return await httpsRequest(jsonEncode(payload), apiUrl, method);
 
  }
 
-  Future addMine(Map<String, dynamic> payload) async {
-    String apiUrl = "http://10.0.2.2:5000/mineByOwner";
+  Future addMine(BuildContext context ,String address,String area,String gpsLatitude, String gpsLongitude,String claimant,String docUrl, String walletAddress) async {
+
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance() ;
+    String? uuid  =  sharedPreferences.getString("uuid");
+    DateTime timeStamp = DateTime.now();
+    String doc = timeStamp.second.toString()+"user"+uuid.toString();
+    String mineId = (timeStamp.millisecondsSinceEpoch ~/ 1000).toString();
+    Mine mine =  Mine(
+        mineId: mineId,
+        mineLocation: address,
+        area: area,
+        gpsLatitude: gpsLatitude,
+        gpsLongitude: gpsLongitude,
+        timeAdded: mineId,
+        verified: "Verified",
+        mineOwner: walletAddress,
+        requestType: 'VERIFY_MINE',
+        requestStatus: "Verified",
+        claimant: claimant,
+        documentUrl: docUrl
+
+    );
+
+    var payload = {
+      "data": mine.toJson()
+    };
+    String apiUrl = "http://10.0.2.2:5000/addnewmine";
     String method = "POST";
+    print(jsonEncode(payload));
     return await httpsRequest(jsonEncode(payload), apiUrl, method);
   }
   getMines(String mineOwner) async {
@@ -160,6 +192,36 @@ class MineclaimApi {
 
     return minesJson;
   }
+  getAllMines() async {
+    String apiUrl = "http://10.0.2.2:5000/get_all_mines";
+    String method = "GET";
+
+
+    final minesJson =  await httpsRequest(jsonEncode({}), apiUrl, method);
+
+    print("Json response: $minesJson");
+    if (minesJson['success']) {
+      List<Mine> mines = [] ;
+      for (var mine in minesJson['data']) {
+        mines.add(Mine.fromJson(mine));
+      }
+      // Mine mine = Mine.fromJson(minesJson);
+      // mines.add(mine);
+      print("Mines: $mines");
+
+
+      return {
+        "success": true,
+        "data": mines,
+        "message": "Mines retrieved successfully"
+      };
+
+
+    }
+
+    return minesJson;
+  }
+
 
   getMineById(String mineId, String mineOwner) async{
     showProcessingDialog(context);

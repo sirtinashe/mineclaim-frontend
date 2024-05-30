@@ -8,6 +8,7 @@ import 'package:mineclaim/presentation/settings_screen/settings_screen.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 
+import '../../my_personal_mines/MyPersonalMines.dart';
 import '../confirm_request_screen/confirm_request_screen.dart';
 
 import '../mine_gallery_screen/mine_gallery_screen.dart';
@@ -66,8 +67,7 @@ class _MineclaimHomeState extends State<MineclaimHome> {
     return [
       // MineGallery(),
       OwnedMines(),
-      RequestHomeScreen(),
-      // MineTransferRequest(),
+
       NotificationScreen(),
       SettingsScreen(),
 
@@ -77,8 +77,10 @@ class _MineclaimHomeState extends State<MineclaimHome> {
 
   List<Widget> _buildMinersScreens() {
     return [
-      // MineGallery(),
+
       OwnedMines(),
+      MyPersonalMines(),
+
       NotificationScreen(),
       SettingsScreen(),
     ];
@@ -86,17 +88,18 @@ class _MineclaimHomeState extends State<MineclaimHome> {
 
   List<PersistentBottomNavBarItem> _minersNavBarsItems() {
     return [
-      // PersistentBottomNavBarItem(
-      //   icon: Icon(Icons.collections),
-      //   title: ("Mine Gallery"),
-      //   activeColorPrimary: CupertinoColors.activeBlue,
-      //   inactiveColorPrimary: CupertinoColors.systemGrey,
-      // ),
+
       PersistentBottomNavBarItem(
         icon: Image.asset("assets/app_icons/home_final.png"),
         // title: ("Mine Collection"),
         activeColorPrimary: Color(0xFF152A47),
         inactiveColorPrimary: Color(0xFF152A47),
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.collections),
+        title: ("Mine Gallery"),
+        activeColorPrimary: CupertinoColors.activeBlue,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         // icon: Icon(Icons.notifications),
@@ -129,18 +132,7 @@ class _MineclaimHomeState extends State<MineclaimHome> {
         activeColorPrimary: Color(0xFF152A47),
         inactiveColorPrimary: Color(0xFF152A47),
       ),
-      PersistentBottomNavBarItem(
-        icon: Image.asset("assets/app_icons/document.png"),
-        // title: ("Market Place"),
-        activeColorPrimary: Color(0xFF152A47),
-        inactiveColorPrimary: Color(0xFF152A47),
-      ),
-      // PersistentBottomNavBarItem(
-      //   icon: Image.asset("assets/app_icons/code-pull-request.png"),
-      //   // title: ("Market Place"),
-      //   activeColorPrimary: Color(0xFF152A47),
-      //   inactiveColorPrimary: Color(0xFF152A47),
-      // ),
+
       PersistentBottomNavBarItem(
         // icon: Icon(Icons.notifications),
         icon: Image.asset("assets/app_icons/notificationf.png"),
