@@ -211,10 +211,7 @@ class SignUpScreen extends StatelessWidget {
 
   onTapSignUpWithEmail(BuildContext context) async {
     try {
-      //
-      // progressIndicator(context);
-      // progressIndicator(context,"Please Wait");
-      // showInformativeDialog("Signing uP", Colors.black54, "Please wait...", context);
+
       showProcessingDialog(context);
       final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
@@ -224,7 +221,7 @@ class SignUpScreen extends StatelessWidget {
         // User is authenticated
         print('User is authenticated.');
         await dismissDialog(context);
-        Navigator.pushNamed(context, AppRoutes.myHomeEmptyScreen);
+        Navigator.pushNamed(context, AppRoutes.signInScreen);
 
         // Perform any additional actions for authenticated users
       }

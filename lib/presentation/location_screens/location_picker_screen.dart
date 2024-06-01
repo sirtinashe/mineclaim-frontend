@@ -104,7 +104,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
             onMapCreated: _onMapCreated,
             onTap: _onMapTapped,
             initialCameraPosition: CameraPosition(
-              target: LatLng(-17.825166, 31.033510), // Initial map position (Harare)
+              target: LatLng(-20.112960, 28.604691), // Initial map position (Harare) #
               zoom: 12,
             ),
             markers: Set<Marker>.from([

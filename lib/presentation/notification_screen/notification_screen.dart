@@ -54,7 +54,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     stream = FirebaseFirestore.instance
         .collection('notifications')
-        .where('mineOwner', isEqualTo: globalUuid)
+        .orderBy('timeAdded', descending: true)
+        // .where('mineOwner', isEqualTo: globalUuid)
         .snapshots();
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mineclaim/core/app_export.dart';
 import 'package:mineclaim/globals.dart';
 import 'package:mineclaim/widgets/app_bar/appbar_leading_iconbutton.dart';
@@ -65,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _buildMyFavorites(context, text: "Wallet Address",
                   onTapMyFavorites: () {
                 onTapMyFavorites(context);
-              }, icon: Icons.wallet, data: globalUuid, show_edit_icon: false
+              }, icon: Icons.wallet, data: globalUuid, show_edit_icon: true
               ),
               // _buildFullName(context),
 
@@ -143,8 +144,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   // imagePath: ImageConstant.img1,
                   height: 20.adaptSize,
                   width: 20.adaptSize,
-                  child: Icon(
-                      Icons.edit_note
+                  child: GestureDetector(
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: data));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("Address ${data} Copied to clipboard"),
+                      ));
+                    },
+                    child: Icon(
+                        Icons.copy,
+
+                    ),
                   ),
                   // margin: EdgeInsets.symmetric(vertical: 10.v)
                 ):Container(
