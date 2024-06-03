@@ -93,18 +93,20 @@ class _OwnedMinesState extends State<OwnedMines> with TickerProviderStateMixin{
                       );
                     } else {
                       print(snapshot.data);
-                      List<Mine> mines = snapshot.data!['data'] ?? [];
 
 
-                      if (mines.length == 0) {
+
+                      if (snapshot.data!['success'] == false) {
                         minesAvailable = false;
                         return EmptyMinesScreen();
                       }
+
                       if (snapshot.hasError) {
                         return Center(
                           child: Text("An error occurred while fetching mines"),
                         );
                       } else {
+                        List<Mine> mines = snapshot.data!['data'] ?? [];
                         return ListView.builder(
                           // padding:  EdgeInsets.only(bottom: 20.v),
                             itemCount: mines.length,

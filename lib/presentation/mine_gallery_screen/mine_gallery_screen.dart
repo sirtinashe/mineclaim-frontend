@@ -39,13 +39,14 @@ class _MineGalleryState extends State<MineGallery> {
   // Stream<QuerySnapshot>? stream;
 
   Future<Map<String ,dynamic>>_getMines() async {
-
-    return await MineclaimApi(context).getAllMines();
+    Map<String ,dynamic> response = await MineclaimApi(context).getAllMines();
+    print("Response from get mines: $response");
+    return  response;
     }
   @override
   void initState() {
     super.initState();
-    futureMines = _getMines();
+    // futureMines = _getMines();
     // stream = FirebaseFirestore.instance
     //     .collection('claimed_by_$globalUuid')
     //     .snapshots();
@@ -127,14 +128,17 @@ class _MineGalleryState extends State<MineGallery> {
                   child: CircularProgressIndicator(),
                 );
               } else {
-                print(snapshot.data);
-                List<Mine> mines = snapshot.data!['data'] ?? [];
+                print("Snapshot data: ${snapshot.data}");
+                List minesList = snapshot.data!['data'];
 
 
-                if (mines.length == 0) {
+
+
+                if (snapshot.data!['success'] == false) {
                   minesAvailable = false;
                   return EmptyMinesScreen();
                 }
+                List<Mine> mines =  snapshot.data!['data'];
                 if (snapshot.hasError) {
                   return Center(
                     child: Text("An error occurred while fetching mines"),
@@ -145,7 +149,7 @@ class _MineGalleryState extends State<MineGallery> {
                       itemCount: mines.length,
                       itemBuilder: (BuildContext context, int index){
                         // Mine mine  =  RequestSerializer.serializeClaimedMines(documents[index].data());
-                        
+
                         return Card(
                           child: Padding(
                             // padding: const EdgeInsets.all(8.0),
