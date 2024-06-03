@@ -307,7 +307,7 @@ class _MyPersonalMinesState extends State<MyPersonalMines> with TickerProviderSt
         ),
 
 
-        floatingActionButton: SpeedDial(
+        floatingActionButton: globalEmail == "ministry@gmail.com"?SpeedDial(
           backgroundColor: Colors.white,
           icon: Icons.add,
           children: [
@@ -336,9 +336,26 @@ class _MyPersonalMinesState extends State<MyPersonalMines> with TickerProviderSt
                     );
 
                   }
+
                 },
                 label:  "Add Mine"
             ),
+          ],
+        ):SpeedDial(
+          backgroundColor: Colors.white,
+          icon: Icons.add,
+          children: [
+            SpeedDialChild(
+                child: Icon(Icons.refresh),
+                label: "Refresh",
+                onTap: () async {
+
+                  futureMines = _getMines();
+                  setState(() {
+
+                  });
+                }
+            )
           ],
         )
     );
