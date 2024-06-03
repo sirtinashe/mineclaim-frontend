@@ -92,10 +92,10 @@ class _MyPersonalMinesState extends State<MyPersonalMines> with TickerProviderSt
                       );
                     } else {
                       print(snapshot.data);
-                      List<Mine> mines = snapshot.data!['data'] ?? [];
 
 
-                      if (mines.length == 0) {
+
+                      if (snapshot.data!['success'] == false) {
                         minesAvailable = false;
                         return EmptyMinesScreen();
                       }
@@ -104,6 +104,7 @@ class _MyPersonalMinesState extends State<MyPersonalMines> with TickerProviderSt
                           child: Text("An error occurred while fetching mines"),
                         );
                       } else {
+                        List<Mine> mines = snapshot.data!['data'] ?? [];
                         return ListView.builder(
                           // padding:  EdgeInsets.only(bottom: 20.v),
                             itemCount: mines.length,
