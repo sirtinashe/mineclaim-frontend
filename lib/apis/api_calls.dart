@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mineclaim/apis/urls.dart';
 import 'package:mineclaim/models/mine.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/dialogs.dart';
+
 
 class MineclaimApi {
   late BuildContext context;
@@ -118,7 +120,7 @@ class MineclaimApi {
     }
   }
  Future transferMine( String mineId,String newOwner) async{
-    String apiUrl = "http://10.0.2.2:5000/transfer_ownership";
+    String apiUrl = "${Urls.BASE_URL}/transfer_ownership";
 
     String method = "POST";
     var payload = {
@@ -156,13 +158,13 @@ class MineclaimApi {
     var payload = {
       "data": mine.toJson()
     };
-    String apiUrl = "http://10.0.2.2:5000/addnewmine";
+    String apiUrl = "${Urls.BASE_URL}/addnewmine";
     String method = "POST";
     print(jsonEncode(payload));
     return await httpsRequest(jsonEncode(payload), apiUrl, method);
   }
   getMines(String mineOwner) async {
-    String apiUrl = "http://10.0.2.2:5000/mineByOwner";
+    String apiUrl = "${Urls.BASE_URL}/mineByOwner";
     String method = "POST";
     var payload = {
       "ownerId": mineOwner,
@@ -193,7 +195,7 @@ class MineclaimApi {
     return minesJson;
   }
   getAllMines() async {
-    String apiUrl = "http://10.0.2.2:5000/get_all_mines";
+    String apiUrl = "${Urls.BASE_URL}/get_all_mines";
     String method = "GET";
 
 
@@ -225,7 +227,7 @@ class MineclaimApi {
 
   getMineById(String mineId, String mineOwner) async{
     showProcessingDialog(context);
-    String apiUrl = "http://10.0.2.2:5000/getMine" ;
+    String apiUrl = "${Urls.BASE_URL}/getMine" ;
     String method  =  "POST";
     var payload = {
       "mineId": mineId,
