@@ -1,5 +1,4 @@
 class Urls {
-  static const String BASE_URL = "https://ec2a-102-128-76-11.ngrok-free.app";
-
-
+  static const String BASE_URL = "https://b9cf-196-220-97-254.ngrok-free.app";
+  
 }

@@ -30,10 +30,12 @@ class TransferMineScreen extends StatefulWidget {
 class _TransferMineScreenState extends State<TransferMineScreen> {
 
   String receiverId = "";
+  String receiverName = "";
   TextEditingController addressController = TextEditingController();
 
   TextEditingController gpsGPSLongitudeController = TextEditingController();
   TextEditingController claimantController = TextEditingController();
+  TextEditingController receiverNameController = TextEditingController();
 
   TextEditingController priceController = TextEditingController();
   final FocusNode addressFocusNode = FocusNode();
@@ -42,6 +44,7 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
   final FocusNode priceFocusNode = FocusNode();
   final FocusNode areaFocusNode = FocusNode();
   final FocusNode claimantNode = FocusNode();
+  final FocusNode receiverFocusNode = FocusNode();
 
   String gpsLatitude = "none";
   String gpsLongitude = "none";
@@ -142,8 +145,12 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
                                           valueColor:
                                           AlwaysStoppedAnimation<Color>(
                                               theme.colorScheme.primary)))),
-                              SizedBox(height: 150.v),
+                              SizedBox(height: 100.v),
                               _buildMineDetails(context),
+                              SizedBox(
+                                height: 12.v,
+                              ),
+                              _ReceiverFieldName(context),
                               SizedBox(height: 20.v),
                               _ReceiverField(context),
                               SizedBox(height: 5.v),
@@ -226,7 +233,7 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
                   ),
                   // trailing: const Icon(Icons.req),
                   subtitle: Text(
-                      widget.mine.mineId,
+                      widget.mine.mineLocation,
                       style: TextStyle(
                         color: Colors.black54,
                       )
@@ -253,7 +260,7 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
                     color: Colors.black54,
                   ),
                   title: const Text(
-                    'Area',
+                    'Area in sqm',
                     // textScaleFactor: 1.5,
                     style: TextStyle(
                       color: Colors.black54,
@@ -310,18 +317,40 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
   Widget _ReceiverField(BuildContext context) {
     return CustomTextFormField(
       controller: receiverController,
-      hintText: "Enter Receiver ID",
+      hintText: "Enter Receiver Address",
       // textInputAction: TextInputAction.done,
       textInputType: TextInputType.text,
       focusNode: areaFocusNode,
       autofocus: false,
       validator: (value) {
         if (value!.isEmpty ) {
-          return "Provide receiver ID";
+          return "Provide receiver address";
         }else{
           print("Receiver ID is $value");
           setState(() {
             receiverId = value;
+          });
+        }
+      },
+    );
+  }
+
+  /// Section Widget
+  Widget _ReceiverFieldName(BuildContext context) {
+    return CustomTextFormField(
+      controller: receiverNameController,
+      hintText: "Enter Receiver Name",
+      // textInputAction: TextInputAction.done,
+      textInputType: TextInputType.text,
+      focusNode: receiverFocusNode,
+      autofocus: false,
+      validator: (value) {
+        if (value!.isEmpty ) {
+          return "Provide receiver Name";
+        }else{
+          print("Receiver name");
+          setState(() {
+            receiverName = value;
           });
         }
       },
@@ -405,7 +434,7 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
   }
 
   transferMine2(BuildContext context) async {
-    // showProcessingDialog(context);
+    showProcessingDialog(context);
     // FirebaseDB firebaseDB = FirebaseDB();
     print(
         "Mine Location ====================================== ${receiverId}");
@@ -413,10 +442,12 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
 
     Map result = await MineclaimApi(context).transferMine(
         widget.mine.mineId,
-        receiverId
+        receiverId,
+        receiverName
     );
-    // dismissDialog(context);
+    dismissDialog(context);
     // xWN1lSnvWvOQ0Zkju2nOylvFBJR2
+    // uH1JczsJjOg2lE2E9drd4VDOIds2
 
     showInformativeDialog("Message", Colors.black45, result['message'], context);
 
@@ -433,7 +464,8 @@ class _TransferMineScreenState extends State<TransferMineScreen> {
     await firebaseDB.transferMine(
         context,
         widget.mine.mineId,
-        receiverId
+        receiverId,
+
 
     );
 

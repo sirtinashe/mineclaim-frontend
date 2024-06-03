@@ -131,9 +131,6 @@ class _MineGalleryState extends State<MineGallery> {
                 print("Snapshot data: ${snapshot.data}");
                 List minesList = snapshot.data!['data'];
 
-
-
-
                 if (snapshot.data!['success'] == false) {
                   minesAvailable = false;
                   return EmptyMinesScreen();

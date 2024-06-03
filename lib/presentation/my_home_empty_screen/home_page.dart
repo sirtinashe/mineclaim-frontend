@@ -77,7 +77,7 @@ class _MineclaimHomeState extends State<MineclaimHome> {
 
   List<Widget> _buildMinersScreens() {
     return [
-
+      // ViZ4jOHjZPQYMXq2y2BK7kzvbhf2
       OwnedMines(),
       MyPersonalMines(),
 

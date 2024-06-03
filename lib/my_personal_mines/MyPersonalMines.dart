@@ -40,6 +40,9 @@ class _MyPersonalMinesState extends State<MyPersonalMines> with TickerProviderSt
 
     return await MineclaimApi(context).getMines(globalUuid);
   }
+  Future<Map<String,dynamic>> _claimMine(String mineId) async {
+    return await MineclaimApi(context).getMineById(mineId, globalUuid);
+  }
 
   @override
   void initState() {
@@ -94,6 +97,10 @@ class _MyPersonalMinesState extends State<MyPersonalMines> with TickerProviderSt
                       print(snapshot.data);
 
 
+                      if(snapshot.data == null){
+                        minesAvailable = true;
+                        return EmptyMinesScreen();
+                      }
 
                       if (snapshot.data!['success'] == false) {
                         minesAvailable = false;
@@ -356,7 +363,52 @@ class _MyPersonalMinesState extends State<MyPersonalMines> with TickerProviderSt
 
                   });
                 }
-            )
+            ),
+            SpeedDialChild(
+                child: Icon(Icons.wallet),
+                label: "Claim Mine",
+                onTap: () async {
+
+                  String? mineId = await claimMineDialog(context);
+                  var response = await _claimMine(mineId!);
+                  print("Claim mine response: $response");
+                  if(response['success']){
+                    // Mine mine = Mine.fromJson(response['data']);
+                    Mine mine = response['data'];
+                    if(mine.mineOwner ==globalUuid){
+                      showInformativeDialog("Success",
+                          Colors.green,
+                          "Mine successfully claimed:\n"
+                              "Mine owner: ${mine.mineOwner}\n"
+                              "Mine location: ${mine.mineLocation}\n"
+                              "Mine size: ${mine.area} sqm\n"
+                              "Mine verified: ${mine.verified}\n"
+                              "Verification status: ${mine.requestStatus}\n"
+                              "Claimant: ${mine.claimant}\n",
+                          context
+                      );
+                    }
+                    else{
+                      showInformativeDialog("No ownership",
+                          Colors.red,
+                          "You do not own the mine:\n"
+                              "Mine owner: ${mine.mineOwner}\n"
+                              "Mine location: ${mine.mineLocation}\n"
+                              "Mine size: ${mine.area} sqm\n"
+                              "Mine verified: ${mine.verified}\n"
+                              "Verification status: ${mine.requestStatus}\n"
+                              "Claimant: ${mine.claimant}\n",
+                          context
+                      );
+                    }
+                  }else{
+                    showInformativeDialog("Error", Colors.black54, response['message'], context);
+                  }
+                  // setState(() {
+                  //
+                  // });
+                }
+            ),
           ],
         )
     );

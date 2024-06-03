@@ -36,7 +36,7 @@ class MineclaimApi {
                 'Content-Type': 'application/json',
               },
               body: payload)
-              .timeout(const Duration(seconds: 15)
+              .timeout(const Duration(seconds: 60)
           );
           if (kDebugMode) {
             // print("Post response: ${response.body}");
@@ -49,7 +49,7 @@ class MineclaimApi {
               // "Authorization": "Bearer ${globals.jwToken}",
               'Content-Type': 'application/json',
             },
-          ).timeout(const Duration(seconds: 15));
+          ).timeout(const Duration(seconds: 60));
           if (kDebugMode) {
             print(response.body);
           }
@@ -61,7 +61,7 @@ class MineclaimApi {
               // "Authorization": "Bearer ${globals.jwToken}",
               'Content-Type': 'application/json',
             },
-          ).timeout(const Duration(seconds: 15));
+          ).timeout(const Duration(seconds: 60));
           if (kDebugMode) {
             print(response.body);
           }
@@ -119,13 +119,14 @@ class MineclaimApi {
       client.close();
     }
   }
- Future transferMine( String mineId,String newOwner) async{
+ Future transferMine( String mineId,String newOwner, String claimantName) async{
     String apiUrl = "${Urls.BASE_URL}/transfer_ownership";
 
     String method = "POST";
     var payload = {
       "mineId": mineId,
-      "newOwnerId":newOwner
+      "newOwnerId":newOwner,
+      "claimantName": claimantName,
     };
 
     return await httpsRequest(jsonEncode(payload), apiUrl, method);
